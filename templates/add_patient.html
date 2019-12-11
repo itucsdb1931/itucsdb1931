@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Pre-Diagnosis</title>
+    <meta charset="utf-8" />
+</head>
+<body> 
+	<h1 style="text-align:center;"> Patient Pre-Diagnosis System</h1>
+	<h2 style="text-align:center;"> Add New Patient</h2>
+	<div style="text-align:center;" class="container">
+	  <form action="/add_new_patient/" method="post">
+		  <table>
+			  <tr>
+				  <th><label><b>Patient Name:</b></label><input type="text" name="name" required></th>
+				  <th><label><b>Patient Age:</b></label><input type="number" name="age" required></th>
+			  </tr>
+			  <tr>
+				  <td><label><b>Weight:</b></label><input type="number" step="0.01" name="weight"></td>
+				  <td><label><b>Height:</b></label><input type="number" step="0.01" name="height"></td>
+			  </tr>
+			  <tr>
+				  <td><label><b>Last Examinate Date:</b></label><input type="date" name="exam_date"></td>
+				  <td><label><b>Blood Type:</b></label><input type="text" name="blood"></td>
+			  </tr>
+			  <tr>
+				  <td id="family_disease_tr">
+					  <ol><li>
+							  <label><b>Family Disease:</b></label>
+							  <input type="text" name="fam_dis">
+							  <label><b>Area:</b></label>
+							  <input type="text" name="fam_area">
+						  </li>
+					  </ol>
+					  <button type="button" id="family_disease_btn">+</button>
+					  <button type="button" id="family_disease_remove">-</button>
+				  </td>
+				  <td id="discomforts_tr">
+					  <ol><li>
+							  <label><b>Discomfort:</b></label>
+							  <input type="text" name="disco">
+							  <label><b>Area:</b></label>
+							  <input type="text" name="disco_area">
+						  	  <label><b>Level:</b></label>
+							  <input type="number" name="disco_level">
+						  </li>
+					  </ol>
+					  <button type="button" id="discomforts_btn">+</button>
+					  <button type="button" id="discomforts_remove">-</button>
+				  </td>
+			  </tr>
+			  <tr>
+				  <td id="medication_tr">
+					  <ol><li>
+							  <label><b>Medication:</b></label>
+							  <input type="text" name="medi">
+							  <label><b>Usage:</b></label>
+							  <input type="text" name="medi_area">
+						  </li>
+					  </ol>
+					  <button type="button" id="medication_btn">+</button>
+					  <button type="button" id="medication_remove">-</button>
+				  </td>
+				  <td id="surgeries_tr">
+					  <ol><li>
+							  <label><b>Surgery:</b></label>
+							  <input type="text" name="surge">
+							  <label><b>Area:</b></label>
+							  <input type="text" name="surge_area">
+						  	  <label><b>Level:</b></label>
+							  <input type="number" name="surge_level">
+						  </li>
+					  </ol>
+					  <button type="button" id="surge_btn">+</button>
+					  <button type="button" id="surge_remove">-</button>
+				  </td>
+			  </tr>
+			  <tr>
+				  <td id="medical_devices_tr">
+					  <ol><li>
+							  <label><b>Medical Device:</b></label>
+							  <input type="text" name="med_dev">
+							  <label><b>Area:</b></label>
+							  <input type="text" name="med_dev_area">
+						  </li>
+					  </ol>
+					  <button type="button" id="medical_device_btn">+</button>
+					  <button type="button" id="medical_device_remove">-</button>
+				  </td>
+				  <td id="allergies_tr">
+					  <ol><li>
+							  <label><b>Allergy:</b></label>
+							  <input type="text" name="allergy">
+							  <label><b>Area:</b></label>
+							  <input type="text" name="allergy_area">
+						  </li>
+					  </ol>
+					  <button type="button" id="allergy_btn">+</button>
+					  <button type="button" id="allergy_remove">-</button>
+				  </td>
+			  </tr>
+		  </table>
+		  <input type="hidden", value="0", id="fam_dis_num", name="fam_dis_num">
+		  <input type="hidden", value="0", id="disco_number", name="disco_number">
+		  <input type="hidden", value="0", id="medi_number", name="medi_number">
+		  <input type="hidden", value="0", id="med_dev_number", name="med_dev_number">
+		  <input type="hidden", value="0", id="surge_number", name="surge_number">
+		  <input type="hidden", value="0", id="allergy_number", name="allergy_number">
+		<button type="submit">Save</button>
+	  </form>
+	</div>
+	<a href="/doctor" style="color: cyan"><u>Back to Doctor Page</u></a>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+	var disease_number = 0;
+	$('#family_disease_btn').click(function (){
+		let disease_html = `<li id=\"fam_dis${disease_number}\"><label><b>Family Disease:&nbsp;</b></label><input type=\"text\" name=\"fam_dis${disease_number}\"><label><b>&nbsp;Area:&nbsp;</b></label><input type=\"text\" name=\"fam_area${disease_number}\"></li>`
+		$('#family_disease_tr li:last').after(disease_html);
+		disease_number ++;
+		document.getElementById(`fam_dis_num`).value = disease_number;
+	});
+
+	$('#family_disease_remove').click(function (){
+		disease_number --;
+		document.getElementById(`fam_dis_num`).value = disease_number;
+		var elem = document.getElementById(`fam_dis${disease_number}`);
+    	elem.parentNode.removeChild(elem);
+    	return false;
+	});
+	var disco_number = 0;
+	$('#discomforts_btn').click(function (){
+		let disco_html = `<li id=\"disco${disco_number}\"><label><b>Discomfort:&nbsp;</b></label><input type=\"text\" name=\"disco${disco_number}\"><label><b>&nbsp;Area:&nbsp;</b></label><input type=\"text\" name=\"disco_area${disco_number}\"><label><b>&nbsp;Level:&nbsp;</b></label><input type=\"number\" name=\"disco_level${disco_number}\"></li>`
+		$('#discomforts_tr li:last').after(disco_html);
+		disco_number ++;
+		document.getElementById(`disco_number`).value = disco_number;
+	});
+
+	$('#discomforts_remove').click(function (){
+		disco_number --;
+		document.getElementById(`disco_number`).value = disco_number;
+		var elem = document.getElementById(`disco${disco_number}`);
+    	elem.parentNode.removeChild(elem);
+    	return false;
+	});
+	var medi_number = 0;
+	$('#medication_btn').click(function (){
+		let medi_html = `<li id=\"medi${medi_number}\"><label><b>Medication:&nbsp;</b></label><input type=\"text\" name=\"medi${medi_number}\"><label><b>&nbsp;Usage:&nbsp;</b></label><input type=\"text\" name=\"medi_area${medi_number}\"></li>`
+		$('#medication_tr li:last').after(medi_html);
+		medi_number ++;
+		document.getElementById(`medi_number`).value = medi_number;
+	});
+
+	$('#medication_remove').click(function (){
+		medi_number --;
+		document.getElementById(`medi_number`).value = medi_number;
+		var elem = document.getElementById(`medi${medi_number}`);
+    	elem.parentNode.removeChild(elem);
+    	return false;
+	});
+	
+	var med_dev_number = 0;
+	$('#medical_device_btn').click(function (){
+		let med_dev_html = `<li id=\"med_dev${med_dev_number}\"><label><b>Medical Device:&nbsp;</b></label><input type=\"text\" name=\"med_dev${med_dev_number}\"><label><b>&nbsp;Area:&nbsp;</b></label><input type=\"text\" name=\"med_dev_area${med_dev_number}\"></li>`
+		$('#medical_devices_tr li:last').after(med_dev_html);
+		med_dev_number ++;
+		document.getElementById(`med_dev_number`).value = med_dev_number;
+	});
+
+	$('#medical_device_remove').click(function (){
+		med_dev_number --;
+		document.getElementById(`med_dev_number`).value = med_dev_number;
+		var elem = document.getElementById(`med_dev${med_dev_number}`);
+    	elem.parentNode.removeChild(elem);
+    	return false;
+	});
+	
+	var surge_number = 0;
+	$('#surge_btn').click(function (){
+		let surge_html = `<li id=\"surge${surge_number}\"><label><b>Surgery:&nbsp;</b></label><input type=\"text\" name=\"surge${surge_number}\"><label><b>&nbsp;Area:&nbsp;</b></label><input type=\"text\" name=\"surge_area${surge_number}\"><label><b>&nbsp;Level:&nbsp;</b></label><input type=\"number\" name=\"surge_level${surge_number}\"></li>`
+		$('#surgeries_tr li:last').after(surge_html);
+		surge_number ++;
+		document.getElementById(`surge_number`).value = surge_number;
+	});
+
+	$('#surge_remove').click(function (){
+		surge_number --;
+		document.getElementById(`surge_number`).value = surge_number;
+		var elem = document.getElementById(`surge${surge_number}`);
+    	elem.parentNode.removeChild(elem);
+    	return false;
+	});
+	
+	var allergy_number = 0;
+	$('#allergy_btn').click(function (){
+		let allergy_html = `<li id=\"allergy${allergy_number}\"><label><b>Allergy:&nbsp;</b></label><input type=\"text\" name=\"allergy${allergy_number}\"><label><b>&nbsp;Area:&nbsp;</b></label><input type=\"text\" name=\"allergy_area${allergy_number}\"></li>`
+		$('#allergies_tr li:last').after(allergy_html);
+		allergy_number ++;
+		document.getElementById(`allergy_number`).value = allergy_number;
+	});
+
+	$('#allergy_remove').click(function (){
+		allergy_number --;
+		document.getElementById(`allergy_number`).value = allergy_number;
+		var elem = document.getElementById(`allergy${allergy_number}`);
+    	elem.parentNode.removeChild(elem);
+    	return false;
+	});
+</script>
+
+</body>
+</html>

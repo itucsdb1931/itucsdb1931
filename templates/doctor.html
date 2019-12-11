@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--<link rel="stylesheet" href="{{ url_for('static') }}" />-->
+    <title>Pre-Diagnosis</title>
+    <meta charset="utf-8"/>
+</head>
+<body>
+<h1 style="text-align:center;"> Patient Pre-Diagnosis System (Doctor Page)</h1>
+
+<div style="text-align:center;" class="container">
+    <form action="/check/" method="post">
+        <label><b>Check Patient :</b></label>
+        <input type="number" placeholder="ID" name="id" required>
+
+        <button type="submit">Check</button>
+    </form>
+</div>
+<div style="text-align:center;">
+    <a href="/add_patient" style="color:cyan;"><i><u>Add New Patient</u></i></a>
+</div>
+<div align="center"><p>{{ no_res }}</p></div>
+<table style="display:{{display}}">
+    <tr>
+        <th colspan="2"><b>Name:</b>{{ name }}</th>
+        <th colspan="2"><b>Age:</b>{{ age }}</th>
+    </tr>
+    <tr>
+        <td><b>Weight:</b> {% if uw == 'n' %}{{ weight }}{% endif %}
+            <form style="display:{{display_wei}}" action="/Update_wei/" method="post">
+                <input type="number" step="0.01" placeholder="{{ weight }}" name="new_weight">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if uw == 'n' %} {% set disp_w="visible" %}
+            {% else %} {% set disp_w="none" %}{% endif %}
+            <form style="display:{{disp_w}}" action="/Update_wei/" method="post">
+                <button type="submit">Update</button>
+            </form>
+        </td>
+
+        <td><b>Height:</b> {% if uphei == 'n' %}{{ height }}{% endif %}
+            <form style="display:{{display_hei}}" action="/Update_hei/" method="post">
+                <input type="number" step="0.01" placeholder="{{ height }}" name="new_height">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if uphei == 'n' %} {% set disp_hei="visible" %}
+            {% else %} {% set disp_hei="none" %}{% endif %}
+            <form style="display:{{disp_hei}}" action="/Update_hei/" method="post">
+                <button type="submit">Update</button>
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td><b>Last Examinate Date:</b> {% if up_exam_date == 'n' %}{{ examinate_date }}{% endif %}
+            <form style="display:{{display_date}}" action="/Update_date/" method="post">
+                <input type="date" placeholder="{{ examinate_date }}" name="new_date">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if up_exam_date == 'n' %} {% set display_date="visible" %}
+            {% else %} {% set display_date="none" %}{% endif %}
+            <form style="display:{{display_date}}" action="/Update_date/" method="post">
+                <button type="submit">Update</button>
+            </form>
+        </td>
+        <td><b>Blood Type:</b> {% if upblood == 'n' %}{{ blood_type }}{% endif %}
+            <form style="display:{{display_blood}}" action="/Update_blood/" method="post">
+                <input type="text" placeholder="{{ blood_type }}" name="new_blood">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if upblood == 'n' %} {% set display_blood="visible" %}
+            {% else %} {% set display_blood="none" %}{% endif %}
+            <form style="display:{{display_blood}}" action="/Update_blood/" method="post">
+                <button type="submit">Update</button>
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td><b>Family Diseases:</b>
+            {% if family_diseases == '-' or family_diseases == [] %}
+                <form style="display:{{display_fam}}" action="/Update_fam/" method="post">
+                    <input type="text" name="fam_dis">
+                    <label><b>Area:</b></label>
+                    <input type="text" name="area">
+                    <button type="submit">OK</button>
+                </form>
+                {% if uf == 'n' %} {% print('no family diseases') %}{% endif %}
+            {% endif %}
+            {% if family_diseases != '-' and family_diseases != [] %}
+                <ol>
+                    {% for fam_dis in family_diseases %}
+                        {% if uf == 'n' %}
+                            {% if display_fam_del == 'none' %}
+                            <li> {{ fam_dis }}</li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            <form style="display:{{display_fam_del}}" action="/Delete_fam/" method="post">
+                    {% for fam_dis in family_diseases %}
+                        <input type="checkbox" name="OK" value="{{ fam_dis }}">{{ fam_dis }}<br/>
+                    {% endfor %}
+                <input type="submit" value="OK">
+            </form>
+                <form style="display:{{display_fam}}" action="/Update_fam/" method="post">
+                    <ol>
+                    {% set i = 0 %}
+                    {% for fam_dis in family_diseases %}
+                        <li>{% set fam = fam_dis.split(' area: ') %}
+                            <input type="text" placeholder="{{fam[0]}}" name="{{fam[0]}}">
+                            <label><b>Area:</b></label>
+                            <input type="text" placeholder="{{fam[1]}}" name="{{fam[1]}}">
+                        </li>
+                        {% set i = i+1 %}
+                    {% endfor %}
+                    </ol>
+                    <button type="submit">OK</button>
+                </form>
+            {% endif %}
+            <form style="display:{{display_fam_ad}}" action="/Add_fam/" method="post">
+                <label><b>Name:</b></label>
+                <input type="text"  name="new_fam">
+                <label><b>Area:</b></label>
+                <input type="text" name="fam_area">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if display_fam_ad == "none" %}
+                {% if uf == 'n' and display_fam_del == 'none' %} {% set disp="visible" %}
+                {% else %} {% set disp="none" %}{% endif %}
+                <form style="display:{{disp}}" action="/Update_fam/" method="post">
+                    <button type="submit">Update</button>
+                </form>
+                <br/>
+                <form style="display:{{disp}}" action="/Delete_fam/" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+                <br/>
+                <form style="display:{{disp}}" action="/Add_fam/" method="post">
+                    <button type="submit">Add New</button>
+                </form>
+            {% endif %}
+        </td>
+        <td><b>Discomforts:</b>
+            {% if discomforts == '-' or discomforts == [] %}
+                <form style="display:{{display_disco}}" action="/Update_disco/" method="post">
+                    <input type="text" name="disco">
+                    <label><b>Area:</b></label>
+                    <input type="text" name="area">
+                    <label><b>Level:</b></label>
+                    <input type="number" name="level">
+                    <button type="submit">OK</button>
+                </form>
+                {% if updisco == 'n' %} {% print('no discomfort') %}{% endif %}
+            {% endif %}
+            {% if discomforts != '-' and discomforts != [] %}
+                <ol>
+                    {% for disco in discomforts %}
+                        {% if updisco == 'n' %}
+                            {% if display_disco_del == 'none' %}
+                            <li> {{ disco }}</li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            <form style="display:{{display_disco_del}}" action="/Delete_disco/" method="post">
+                    {% for disco in discomforts %}
+                        <input type="checkbox" name="OK" value="{{ disco }}">{{ disco }}<br/>
+                    {% endfor %}
+                <input type="submit" value="OK">
+            </form>
+                <form style="display:{{display_disco}}" action="/Update_disco/" method="post">
+                    <ol>
+                    {% set i = 0 %}
+                    {% for disco in discomforts %}
+                        <li>{% set dis = disco.split(' area: ') %}{% set lev = dis[1].split(' level: ') %}
+                            <input type="text" placeholder="{{dis[0]}}" name="{{dis[0]}}">
+                            <label><b>Area:</b></label>
+                            <input type="text" placeholder="{{lev[0]}}" name="{{lev[0]}}">
+                            <label><b>Level:</b></label>
+                            <input type="text" placeholder="{{lev[1]}}" name="{{lev[1]}}">
+                        </li>
+                        {% set i = i+1 %}
+                    {% endfor %}
+                    </ol>
+                    <button type="submit">OK</button>
+                </form>
+            {% endif %}
+            <form style="display:{{display_disco_ad}}" action="/Add_disco/" method="post">
+                <label><b>Name:</b></label>
+                <input type="text"  name="new_disco">
+                <label><b>Area:</b></label>
+                <input type="text" name="disco_area">
+                <label><b>Level:</b></label>
+                <input type="text" name="disco_level">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if display_disco_ad == "none" %}
+                {% if updisco == 'n' and display_disco_del == 'none' %} {% set disp_dis="visible" %}
+                {% else %} {% set disp_dis="none" %}{% endif %}
+                <form style="display:{{disp_dis}}" action="/Update_disco/" method="post">
+                    <button type="submit">Update</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_dis}}" action="/Delete_disco/" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_dis}}" action="/Add_disco/" method="post">
+                    <button type="submit">Add New</button>
+                </form>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><b>Medications:</b>
+            {% if medications == '-' or medications == [] %}
+                <form style="display:{{display_medi}}" action="/Update_medi/" method="post">
+                    <input type="text" name="medi">
+                    <label><b>Usage:</b></label>
+                    <input type="text" name="area">
+                    <button type="submit">OK</button>
+                </form>
+                {% if upmedi == 'n' %} {% print('no medication') %}{% endif %}
+            {% endif %}
+            {% if medications != '-' and medications != [] %}
+                <ol>
+                    {% for medi in medications %}
+                        {% if upmedi == 'n' %}
+                            {% if display_medi_del == 'none' %}
+                            <li> {{ medi }}</li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            <form style="display:{{display_medi_del}}" action="/Delete_medi/" method="post">
+                    {% for medi in medications %}
+                        <input type="checkbox" name="OK" value="{{ medi }}">{{ medi }}<br/>
+                    {% endfor %}
+                <input type="submit" value="OK">
+            </form>
+                <form style="display:{{display_medi}}" action="/Update_medi/" method="post">
+                    <ol>
+                    {% set i = 0 %}
+                    {% for medi in medications %}
+                        <li>{% set dis = medi.split(' usage: ') %}
+                            <input type="text" placeholder="{{dis[0]}}" name="{{dis[0]}}">
+                            <label><b>Usage:</b></label>
+                            <input type="text" placeholder="{{dis[1]}}" name="{{dis[1]}}">
+                        </li>
+                        {% set i = i+1 %}
+                    {% endfor %}
+                    </ol>
+                    <button type="submit">OK</button>
+                </form>
+            {% endif %}
+            <form style="display:{{display_medi_ad}}" action="/Add_medi/" method="post">
+                <label><b>Name:</b></label>
+                <input type="text"  name="new_medi">
+                <label><b>Usage:</b></label>
+                <input type="text" name="medi_area">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if display_medi_ad == "none" %}
+                {% if upmedi == 'n' and display_medi_del == 'none' %} {% set disp_medi="visible" %}
+                {% else %} {% set disp_medi="none" %}{% endif %}
+                <form style="display:{{disp_medi}}" action="/Update_medi/" method="post">
+                    <button type="submit">Update</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_medi}}" action="/Delete_medi/" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_medi}}" action="/Add_medi/" method="post">
+                    <button type="submit">Add New</button>
+                </form>
+            {% endif %}
+        </td>
+
+        <td><b>Surgeries:</b>
+            {% if surgeries == '-' or surgeries == [] %}
+                <form style="display:{{display_surge}}" action="/Update_surge/" method="post">
+                    <input type="text" name="surge">
+                    <label><b>Area:</b></label>
+                    <input type="text" name="area">
+                    <label><b>Level:</b></label>
+                    <input type="number" name="level">
+                    <button type="submit">OK</button>
+                </form>
+                {% if upsurge == 'n' %} {% print('no surgery') %}{% endif %}
+            {% endif %}
+            {% if surgeries != '-' and surgeries != [] %}
+                <ol>
+                    {% for surge in surgeries %}
+                        {% if upsurge == 'n' %}
+                            {% if display_surge_del == 'none' %}
+                            <li> {{ surge }}</li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            <form style="display:{{display_surge_del}}" action="/Delete_surge/" method="post">
+                    {% for surge in surgeries %}
+                        <input type="checkbox" name="OK" value="{{ surge }}">{{ surge }}<br/>
+                    {% endfor %}
+                <input type="submit" value="OK">
+            </form>
+                <form style="display:{{display_surge}}" action="/Update_surge/" method="post">
+                    <ol>
+                    {% set i = 0 %}
+                    {% for surge in surgeries %}
+                        <li>{% set dis = surge.split(' area: ') %}{% set level = dis[1].split(' level: ') %}
+                            <input type="text" placeholder="{{dis[0]}}" name="{{dis[0]}}">
+                            <label><b>Area:</b></label>
+                            <input type="text" placeholder="{{level[0]}}" name="{{level[0]}}">
+                            <label><b>Level:</b></label>
+                            <input type="number" placeholder="{{level[1]}}" name="{{level[1]}}">
+                        </li>
+                        {% set i = i+1 %}
+                    {% endfor %}
+                    </ol>
+                    <button type="submit">OK</button>
+                </form>
+            {% endif %}
+            <form style="display:{{display_surge_ad}}" action="/Add_surge/" method="post">
+                <label><b>Name:</b></label>
+                <input type="text"  name="new_surge">
+                <label><b>Area:</b></label>
+                <input type="text" name="surge_area">
+                <label><b>Level:</b></label>
+                <input type="number" name="surge_level">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if display_surge_ad == "none" %}
+                {% if upsurge == 'n' and display_surge_del == 'none' %} {% set disp_dis="visible" %}
+                {% else %} {% set disp_dis="none" %}{% endif %}
+                <form style="display:{{disp_dis}}" action="/Update_surge/" method="post">
+                    <button type="submit">Update</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_dis}}" action="/Delete_surge/" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_dis}}" action="/Add_surge/" method="post">
+                    <button type="submit">Add New</button>
+                </form>
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td><b>Medical Devices:</b>
+            {% if medical_device == '-' or medical_device == [] %}
+                <form style="display:{{display_med_dev}}" action="/Update_med_dev/" method="post">
+                    <input type="text" name="med_dev">
+                    <label><b>Area:</b></label>
+                    <input type="text" name="area">
+                    <button type="submit">OK</button>
+                </form>
+                {% if upmed_dev == 'n' %} {% print('no medical device') %}{% endif %}
+            {% endif %}
+            {% if medical_device != '-' and medical_device != [] %}
+                <ol>
+                    {% for med_dev in medical_device %}
+                        {% if upmed_dev == 'n' %}
+                            {% if display_med_dev_del == 'none' %}
+                            <li> {{ med_dev }}</li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            <form style="display:{{display_med_dev_del}}" action="/Delete_med_dev/" method="post">
+                    {% for med_dev in medical_device %}
+                        <input type="checkbox" name="OK" value="{{ med_dev }}">{{ med_dev }}<br/>
+                    {% endfor %}
+                <input type="submit" value="OK">
+            </form>
+                <form style="display:{{display_med_dev}}" action="/Update_med_dev/" method="post">
+                    <ol>
+                    {% set i = 0 %}
+                    {% for med_dev in medical_device %}
+                        <li>{% set dis = med_dev.split(' area: ') %}
+                            <input type="text" placeholder="{{dis[0]}}" name="{{dis[0]}}">
+                            <label><b>Area:</b></label>
+                            <input type="text" placeholder="{{dis[1]}}" name="{{dis[1]}}">
+                        </li>
+                        {% set i = i+1 %}
+                    {% endfor %}
+                    </ol>
+                    <button type="submit">OK</button>
+                </form>
+            {% endif %}
+            <form style="display:{{display_med_dev_ad}}" action="/Add_med_dev/" method="post">
+                <label><b>Name:</b></label>
+                <input type="text"  name="new_med_dev">
+                <label><b>Area:</b></label>
+                <input type="text" name="med_dev_area">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if display_med_dev_ad == "none" %}
+                {% if upmed_dev == 'n' and display_med_dev_del == 'none' %} {% set disp_med_dev="visible" %}
+                {% else %} {% set disp_med_dev="none" %}{% endif %}
+                <form style="display:{{disp_med_dev}}" action="/Update_med_dev/" method="post">
+                    <button type="submit">Update</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_med_dev}}" action="/Delete_med_dev/" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_med_dev}}" action="/Add_med_dev/" method="post">
+                    <button type="submit">Add New</button>
+                </form>
+            {% endif %}
+        </td>
+
+        <td><b>Allergies:</b>
+            {% if allergies == '-' or allergies == [] %}
+                <form style="display:{{display_aller}}" action="/Update_aller/" method="post">
+                    <input type="text" name="aller">
+                    <label><b>Area:</b></label>
+                    <input type="text" name="area">
+                    <button type="submit">OK</button>
+                </form>
+                {% if upaller == 'n' %} {% print('no allergy') %}{% endif %}
+            {% endif %}
+            {% if allergies != '-' and allergies != [] %}
+                <ol>
+                    {% for aller in allergies %}
+                        {% if upaller == 'n' %}
+                            {% if display_aller_del == 'none' %}
+                            <li> {{ aller }}</li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            <form style="display:{{display_aller_del}}" action="/Delete_aller/" method="post">
+                    {% for aller in allergies %}
+                        <input type="checkbox" name="OK" value="{{ aller }}">{{ aller }}<br/>
+                    {% endfor %}
+                <input type="submit" value="OK">
+            </form>
+                <form style="display:{{display_aller}}" action="/Update_aller/" method="post">
+                    <ol>
+                    {% set i = 0 %}
+                    {% for aller in allergies %}
+                        <li>{% set dis = aller.split(' area: ') %}
+                            <input type="text" placeholder="{{dis[0]}}" name="{{dis[0]}}">
+                            <label><b>Area:</b></label>
+                            <input type="text" placeholder="{{dis[1]}}" name="{{dis[1]}}">
+                        </li>
+                        {% set i = i+1 %}
+                    {% endfor %}
+                    </ol>
+                    <button type="submit">OK</button>
+                </form>
+            {% endif %}
+            <form style="display:{{display_aller_ad}}" action="/Add_aller/" method="post">
+                <label><b>Name:</b></label>
+                <input type="text"  name="new_aller">
+                <label><b>Area:</b></label>
+                <input type="text" name="aller_area">
+                <button type="submit">OK</button>
+            </form>
+        </td>
+        <td>{% if display_aller_ad == "none" %}
+                {% if upaller == 'n' and display_aller_del == 'none' %} {% set disp_aller="visible" %}
+                {% else %} {% set disp_aller="none" %}{% endif %}
+                <form style="display:{{disp_aller}}" action="/Update_aller/" method="post">
+                    <button type="submit">Update</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_aller}}" action="/Delete_aller/" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+                <br/>
+                <form style="display:{{disp_aller}}" action="/Add_aller/" method="post">
+                    <button type="submit">Add New</button>
+                </form>
+            {% endif %}
+        </td>
+    </tr>
+</table>
+</body>
+</html>
