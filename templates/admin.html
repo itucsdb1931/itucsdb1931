@@ -3,9 +3,30 @@
 {% block TITLE %}
 ADMIN
 {% endblock %}
-
+<h3 class="text-center">PATIENTS</h3>
+<hr>
 {% block body %}
-ADMIN
+    <table class="table table-hover table-inverse">
+        <thead class="thead-inverse">
+        <tr>
+            <th>NAME</th>
+            <th>AGE</th>
+            <th>Height</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td scope="row">{{ person[0] }}</td>
+            <td>{{ person[1] }}</td>
+            <td>{{ person[2] }}</td>
+        </tr>
+        <tr>
+            <td scope="row">qwe</td>
+            <td>qwe</td>
+            <td>qwe</td>
+        </tr>
+        </tbody>
+    </table>
 {% endblock %}
 
 

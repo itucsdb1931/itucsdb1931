@@ -69,7 +69,8 @@ def giris():
 
 @app.route("/admin")
 def admin_page():
-    return render_template('admin.html')
+    person = ["doğu",21,170]
+    return render_template('admin.html',person=person)
 
 @app.route("/doctor")
 def doctor_page():

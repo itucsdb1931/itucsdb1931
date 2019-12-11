@@ -9,7 +9,7 @@ DSN_tc = {'user': "postgres",  # DSN for Emre Faruk Kolaç
            }
 
 DSN_dok = {'user': "postgres",  # DSN for Furkan Güvenç
-          'password': "1234",
+          'password': "proje317",
           'host': "127.0.0.1",
           'port': "5432",
           'database': "postgres"
