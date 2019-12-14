@@ -10,22 +10,19 @@ DNS = {'user' : "postgres",
       'port' : "5432",
       'database' : "dummy"}
 
-# INIT_STATEMENTS = [
-#
-# ]
-#
-# count = 0
-# blood = id = ""
-# age = name = weight = height = "-"
-# aller = med_dev = surge = medi = discomp = family_diseases = list()
-# exam = "no_date"
-# with dbapi2.connect(db_url) as connection:
-#     cursor = connection.cursor()
-#     for statement in INIT_STATEMENTS:
-#         cursor.execute(statement)
-#     cursor.close()
+count = 0
+blood = id = ""
+age = name = weight = height = "-"
+aller = med_dev = surge = medi = discomp = family_diseases = list()
+exam = "no_date"
 
 # DOĞU
+
+
+@app.route("/")
+def home():
+    return render_template('home.html')
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -42,9 +39,6 @@ def login():
                     return redirect(url_for("admin_page"))
                 else:
                     return redirect(url_for("doctor_page"))
-                print(record)
-
-
     return render_template("login.html")
 
 @app.route("/register", methods=["GET", "POST"])
@@ -61,24 +55,19 @@ def register():
 
         return redirect(url_for("login"))
     return render_template("register.html")
-# \DOĞU
 
-@app.route("/")
-def giris():
-    return render_template('home.html')
-
-@app.route("/admin")
+@app.route("/admin", methods=["GET", "POST"])
 def admin_page():
-    person = ["doğu",21,170]
-    return render_template('admin.html',person=person)
+    statement = "SELECT ALL * FROM PATIENT"
+    with dbapi2.connect(db_url) as connection:
+        cursor = connection.cursor()
+        cursor.execute(statement)
+        patients = cursor.fetchall()
+    return render_template('admin.html', patients = patients)
 
-@app.route("/doctor")
+@app.route("/doctor", methods=["GET", "POST"])
 def doctor_page():
-    return render_template('doctor.html', name="", age="", weight="", height="",
-                                examinate_date="", blood_type="", family_diseases="", discomforts="",
-                                medications="", surgeries="", medical_device="", allergies="", uw='n', display="none",
-                                display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
-                                display_fam_del="none", uphei="n", display_hei= "none")
+    return render_template('doctor.html')
 
 @app.route("/add_patient")
 def add_patient():

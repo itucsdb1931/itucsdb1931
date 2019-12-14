@@ -9,22 +9,23 @@ ADMIN
     <table class="table table-hover table-inverse">
         <thead class="thead-inverse">
         <tr>
+            <th>ID</th>
             <th>NAME</th>
             <th>AGE</th>
+            <th>Weight</th>
             <th>Height</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td scope="row">{{ person[0] }}</td>
-            <td>{{ person[1] }}</td>
-            <td>{{ person[2] }}</td>
-        </tr>
-        <tr>
-            <td scope="row">qwe</td>
-            <td>qwe</td>
-            <td>qwe</td>
-        </tr>
+        {% for patient in patients %}
+            <tr>
+                <td scope="row">{{ patient[0] }}</td>
+                <td scope="row">{{ patient[1] }}</td>
+                <td scope="row">{{ patient[2] }}</td>
+                <td scope="row">{{ patient[3] }}</td>
+                <td scope="row">{{ patient[4] }}</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 {% endblock %}

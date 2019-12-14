@@ -1,14 +1,14 @@
 import os.path
 import sys
 
-DSN_tc = {'user': "postgres",
+DSN_tc = {'user': "postgres",  # DSN for Emre Faruk Kolaç
            'password': "123",
            'host': "127.0.0.1",
            'port': "5432",
            'database': "dummy"
            }
 
-DSN_dok = {'user': "postgres",  #
+DSN_dok = {'user': "postgres",  # DSN for Furkan Güvenç
           'password': "proje317",
           'host': "127.0.0.1",
           'port': "5432",
