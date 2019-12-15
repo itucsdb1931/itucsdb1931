@@ -4,12 +4,6 @@ from configurations import db_url
 
 app = Flask(__name__)
 
-DNS = {'user' : "postgres",
-      'password' : "123",
-      'host' : "localhost",
-      'port' : "5432",
-      'database' : "dummy"}
-
 count = 0
 blood = id = ""
 age = name = weight = height = "-"
