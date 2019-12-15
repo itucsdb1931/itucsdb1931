@@ -4,6 +4,14 @@ from configurations import db_url
 
 app = Flask(__name__)
 
+INIT_STATEMENTS = [
+]
+with dbapi2.connect(db_url) as connection:
+    cursor = connection.cursor()
+    for statement in INIT_STATEMENTS:
+        cursor.execute(statement)
+    cursor.close()
+
 count = 0
 blood = id = ""
 age = name = weight = height = "-"
@@ -49,12 +57,7 @@ def register():
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin_page():
-    statement = "SELECT ALL * FROM PATIENT"
-    with dbapi2.connect(db_url) as connection:
-        cursor = connection.cursor()
-        cursor.execute(statement)
-        patients = cursor.fetchall()
-    return render_template('admin.html', patients = patients)
+    return render_template('admin.html', display="none")
 
 @app.route("/doctor", methods=["GET", "POST"])
 def doctor_page():
@@ -73,20 +76,51 @@ def del_patient(patient_id):
         cursor.close()
     return redirect(url_for('show_patients'))
 
-@app.route("/ShowAll/",  methods=['GET', 'POST'])
+@app.route("/del_user/<int:user_id>",  methods=['GET', 'POST'])
+def del_user(user_id):
+    state = "DELETE FROM USERS WHERE ID={}".format(user_id)
+    with dbapi2.connect(db_url) as connection:
+        cursor = connection.cursor()
+        cursor.execute(state)
+        cursor.close()
+    return redirect(url_for('show_users'))
+
+@app.route("/ShowAllPatients/",  methods=['GET', 'POST'])
 def show_patients():
     state = "SELECT ALL * FROM PATIENT"
     with dbapi2.connect(db_url) as connection:
         cursor = connection.cursor()
         cursor.execute(state)
         patients = cursor.fetchall()
-        print(patients)
-    return render_template('admin.html', patients=patients)
+        cursor.close()
+    return render_template('admin.html', patients=patients, display="visible", sel = 'p')
+
+@app.route("/ShowAllUsers/",  methods=['GET', 'POST'])
+def show_users():
+    state = "SELECT ALL * FROM USERS"
+    with dbapi2.connect(db_url) as connection:
+        cursor = connection.cursor()
+        cursor.execute(state)
+        users = cursor.fetchall()
+        cursor.close()
+    return render_template('admin.html', users=users, display="visible", sel='u')
+
+@app.route("/Exit/",  methods=['GET', 'POST'])
+def Exit():
+    return render_template('home.html')
 
 @app.route("/add_new_patient/", methods=['GET', 'POST'])
 def add_new_patient():
     bloody = request.form["blood"]
     blood_new = "null"
+
+    # state = "SELECT MAX(ID) FROM PATIENT"
+    # with dbapi2.connect(db_url) as connection:
+    #     cursor = connection.cursor()
+    #     cursor.execute(state)
+    #     x = cursor.fetchone()
+    #     cursor.close()
+
     if (bloody != ""):
         if bloody == "AB+":
             blood_new = 1
@@ -107,19 +141,16 @@ def add_new_patient():
         else:
             blood_new = "null"
     statements = ["INSERT INTO PATIENT(NAME, AGE, WEIGHT, HEIGHT, LAST_EXAMINATION_DATE, "
-                  "BLOOD_TYPE) VALUES('{}', {}, {}, {}, '{}', {})".format(request.form["name"], request.form["age"],
+                  "BLOOD_TYPE) VALUES('{}', {}, {}, {}, '{}', {}) RETURNING ID".format(request.form["name"], request.form["age"],
                                                                           request.form["weight"],
                                                                           request.form["height"], request.form["exam_date"],
                                                                           blood_new)]
-    state = "SELECT MAX(ID) FROM PATIENT"
     with dbapi2.connect(db_url) as connection:
         cursor = connection.cursor()
         cursor.execute(statements[0])
+        x = cursor.fetchone()
         cursor.close()
-        cursor = connection.cursor()
-        cursor.execute(state)
-        x = cursor.fetchall()[0][0]
-    print(x)
+    statements = []
     if request.form["fam_dis"] != "":
         state = "INSERT INTO FAMILY_DISEASE(NAME, AREA, PERSON) VALUES('{}', '{}', {})".format(request.form["fam_dis"],
                                                                                                request.form["fam_area"],
