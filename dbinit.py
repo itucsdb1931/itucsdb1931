@@ -5,12 +5,6 @@ import psycopg2 as dbapi2
 
 
 INIT_STATEMENTS = [
-"DELETE FROM USERS WHERE USERNAME='ozan'",
-"DELETE FROM USERS WHERE USERNAME='talha'",
-
-"INSERT INTO USERS VALUES(1, 'ozan', '$pbkdf2-sha256$29000$6L3XWqu1du69V6p1TmktxQ$/j/yTWeq/JtoAegueFAAsPEMre0yLL1PVw5Dt1abC.Q', 'ozan@gmail.com', TRUE)",
-"INSERT INTO USERS VALUES(2, 'talha', '$pbkdf2-sha256$29000$Q0jJGcP4PwcAgJDy3nsvZQ$UXWEIRdeKoW0zA//412i/bupIqKUO4lbx5PvPj5izOE', 'talha@gmail.com', FALSE)"
-
 ]
 
 def initialize(url):
