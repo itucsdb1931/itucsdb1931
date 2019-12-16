@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
-
-{% block TITLE %}
-ENTRY
-{% endblock %}
-	
- {% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}" />
+	<title>Pre-Diagnosis</title>
+    <meta charset="utf-8" />
+</head>
 <body> 
 	<h1 style="text-align:center;"> Patient Pre-Diagnosis System </h1>
 
@@ -15,4 +15,4 @@ ENTRY
 	  <a href="/doctor">Docter Page</a>
 	  </div>
 </body>
-{% endblock %}
+</html>
