@@ -1,4 +1,5 @@
 from flask import Flask, render_template, Response, request, redirect, url_for
+from passlib.hash import pbkdf2_sha256 as hasher
 import psycopg2 as dbapi2
 from configurations import db_url
 
@@ -28,30 +29,45 @@ def login():
         uname = request.form["uname"]
         passw = request.form["passw"]
 
-        state = "SELECT ID, ISADMIN FROM USERS WHERE USERNAME='{}' AND PASSWORD='{}'".format(uname,passw)
+        state = "SELECT ID, ISADMIN, PASSWORD FROM USERS WHERE USERNAME='{}'".format(uname)
         with dbapi2.connect(db_url) as connection:
             cursor = connection.cursor()
             cursor.execute(state)
             record = cursor.fetchone()
             if record != None:
                 if record[1]: # admin
-                    return redirect(url_for("admin_page"))
-                else:
-                    return redirect(url_for("doctor_page"))
+                    if hasher.verify(passw, record[2]):
+                        return redirect(url_for("admin_page"))
+                    else: ###################################### hatalı şifre
+                        render_template("login.html")
+                else: # doctor
+                    if hasher.verify(passw, record[2]):
+                        return render_template('doctor.html', display="none")
+                    else:  ###################################### hatalı şifre
+                        render_template("login.html")
     return render_template("login.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         uname = request.form['uname']
-        mail = request.form['mail']
-        passw = request.form['passw']
-
-        state = "INSERT INTO USERS(USERNAME, PASSWORD, MAIL) VALUES('{}','{}','{}') ".format(uname, passw, mail)
+        state = "SELECT ID FROM USERS WHERE USERNAME='{}'".format(uname)
         with dbapi2.connect(db_url) as connection:
             cursor = connection.cursor()
             cursor.execute(state)
-
+            record = cursor.fetchone()
+            cursor.close()
+        if record == None:
+            mail = request.form['mail']
+            passw = request.form['passw']
+            hashed = hasher.hash(passw)
+            state = "INSERT INTO USERS(USERNAME, PASSWORD, MAIL) VALUES('{}','{}','{}') ".format(uname, hashed, mail)
+            with dbapi2.connect(db_url) as connection:
+                cursor = connection.cursor()
+                cursor.execute(state)
+                cursor.close()
+        else:
+            return render_template("register.html")
         return redirect(url_for("login"))
     return render_template("register.html")
 
@@ -154,67 +170,67 @@ def add_new_patient():
     if request.form["fam_dis"] != "":
         state = "INSERT INTO FAMILY_DISEASE(NAME, AREA, PERSON) VALUES('{}', '{}', {})".format(request.form["fam_dis"],
                                                                                                request.form["fam_area"],
-                                                                                               x)
+                                                                                               x[0])
         statements.append(state)
     if int(request.form["fam_dis_num"]) != 0:
         for i in range(int(request.form["fam_dis_num"])):
             state = "INSERT INTO FAMILY_DISEASE(NAME, AREA, PERSON) VALUES('{}', '{}', {})".format(request.form["fam_dis" + str(i)],
                                                                                                    request.form["fam_area" + str(i)],
-                                                                                                   x)
+                                                                                                   x[0])
             statements.append(state)
     if request.form["disco"] != "":
         state = "INSERT INTO DISCOMFORT(NAME, AREA, LEVELS, PERSON) VALUES('{}', '{}', {}, {})".format(request.form["disco"],
                                                                                                request.form["disco_area"], request.form["disco_level"],
-                                                                                               x)
+                                                                                               x[0])
         statements.append(state)
     if int(request.form["disco_number"]) != 0:
         for i in range(int(request.form["disco_number"])):
             state = "INSERT INTO DISCOMFORT(NAME, AREA, LEVELS, PERSON) VALUES('{}', '{}', {}, {})".format(request.form["disco" + str(i)],
-                                                                                              request.form["disco_area" + str(i)], request.form["disco_level" + str(i)], x)
+                                                                                              request.form["disco_area" + str(i)], request.form["disco_level" + str(i)], x[0])
             statements.append(state)
     if request.form["med_dev"] != "":
         state = "INSERT INTO MEDICAL_DEVICE(NAME, AREA, PERSON) VALUES('{}', '{}', {})".format(request.form["med_dev"],
                                                                                                request.form["med_dev_area"],
-                                                                                               x)
+                                                                                               x[0])
         statements.append(state)
     if int(request.form["med_dev_number"]) != 0:
         for i in range(int(request.form["med_dev_number"])):
             state = "INSERT INTO MEDICAL_DEVICE(NAME, AREA, PERSON) VALUES('{}', '{}', {})".format(request.form["med_dev" + str(i)],
                                                                                                    request.form["med_dev_area" + str(i)],
-                                                                                                   x)
+                                                                                                   x[0])
             statements.append(state)
     if request.form["medi"] != "":
         state = "INSERT INTO MEDICATION(NAME, USAGES, PERSON) VALUES('{}', '{}', {})".format(request.form["medi"],
                                                                                                request.form["medi_area"],
-                                                                                               x)
+                                                                                               x[0])
         statements.append(state)
     if int(request.form["medi_number"]) != 0:
         for i in range(int(request.form["medi_number"])):
             state = "INSERT INTO MEDICATION(NAME, USAGES, PERSON) VALUES('{}', '{}', {})".format(request.form["medi" + str(i)],
                                                                                                    request.form["medi_area" + str(i)],
-                                                                                                   x)
+                                                                                                   x[0])
             statements.append(state)
     if request.form["surge"] != "":
         state = "INSERT INTO SURGERY(NAME, AREA, LEVELS, PERSON) VALUES('{}', '{}', {}, {})".format(request.form["surge"],
                                                                                                request.form["surge_area"], request.form["surge_level"],
-                                                                                               x)
+                                                                                               x[0])
         statements.append(state)
     if int(request.form["surge_number"]) != 0:
         for i in range(int(request.form["surge_number"])):
             state = "INSERT INTO SURGERY(NAME, AREA, LEVELS, PERSON) VALUES('{}', '{}', {}, {})".format(request.form["surge" + str(i)],
                                                                                                    request.form["surge_area" + str(i)], request.form["surge_level" + str(i)],
-                                                                                                   x)
+                                                                                                   x[0])
             statements.append(state)
     if request.form["allergy"] != "":
         state = "INSERT INTO ALLERGY(NAME, AREA, PERSON) VALUES('{}', '{}', {})".format(request.form["allergy"],
                                                                                                request.form["allergy_area"],
-                                                                                               x)
+                                                                                               x[0])
         statements.append(state)
     if int(request.form["allergy_number"]) != 0:
         for i in range(int(request.form["allergy_number"])):
             state = "INSERT INTO ALLERGY(NAME, AREA, PERSON) VALUES('{}', '{}', {})".format(request.form["allergy" + str(i)],
                                                                                                    request.form["allergy_area" + str(i)],
-                                                                                                   x)
+                                                                                                   x[0])
             statements.append(state)
 
     with dbapi2.connect(db_url) as connection:
@@ -532,7 +548,6 @@ def delete_fam():
         statement = []
         for x in request.form.getlist("OK"):
             y = x.split(" area: ")
-            print(x, y)
             statement.append("DELETE FROM FAMILY_DISEASE WHERE NAME='{}'".format(y[0]))
             family_diseases.remove(x)
         with dbapi2.connect(db_url) as connection:
@@ -548,6 +563,7 @@ def delete_fam():
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
+                               display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 
@@ -580,11 +596,9 @@ def update_fam():
         else:
             for fam in family_diseases:
                 x = fam.split(' area: ')
-                print(family_diseases, x[0])
                 if (request.form[x[0]] != ""):
                     old_name = x[0]
                     family_diseases[i] = (request.form[x[0]] + " area: " + request.form[x[1]])
-                    print(family_diseases, old_name)
                     statement.append("UPDATE FAMILY_DISEASE SET NAME='{}', AREA='{}' WHERE NAME='{}'".format(request.form[x[0]], request.form[x[1]], old_name))
                 i+=1
 
@@ -716,7 +730,6 @@ def update_disco():
         count_disco = 0
         i = 0
         statement = []
-        print(discomp)
         if discomp == "-" or discomp == []:
             if (request.form["disco"] != ""):
                 discomp.append(request.form["disco"] + " area: " + request.form["area"] + " level: " + request.form["level"])
@@ -860,7 +873,6 @@ def update_medi():
         count_medi = 0
         i = 0
         statement = []
-        print(medi)
         if medi == "-" or medi == []:
             if (request.form["medi"] != ""):
                 medi.append(request.form["medi"] + " usage: " + request.form["area"])
@@ -1145,7 +1157,6 @@ def update_med_dev():
         count_med_dev = 0
         i = 0
         statement = []
-        print(med_dev)
         if med_dev == "-" or med_dev == []:
             if (request.form["med_dev"] != ""):
                 med_dev.append(request.form["med_dev"] + " area: " + request.form["area"])
@@ -1288,7 +1299,6 @@ def update_aller():
         count_aller = 0
         i = 0
         statement = []
-        print(aller)
         if aller == "-" or aller == []:
             if (request.form["aller"] != ""):
                 aller.append(request.form["aller"] + " area: " + request.form["area"])
