@@ -42,7 +42,7 @@ def login():
                         render_template("login.html")
                 else: # doctor
                     if hasher.verify(passw, record[2]):
-                        return render_template('doctor.html', display="none", new_pat_id="")
+                        return render_template('doctor.html', display="none")
                     else:  ###################################### hatalı şifre
                         render_template("login.html")
     return render_template("login.html")
@@ -77,7 +77,7 @@ def admin_page():
 
 @app.route("/doctor", methods=["GET", "POST"])
 def doctor_page():
-    return render_template('doctor.html', display="none", new_pat_id="")
+    return render_template('doctor.html', display="none")
 
 @app.route("/add_patient")
 def add_patient():
@@ -239,9 +239,11 @@ def add_new_patient():
             cursor.execute(state)
         cursor.close()
 
-    return render_template('doctor.html', name=request.form["name"], age="", weight="", height="",
+    return render_template('doctor.html', name="", age="", weight="", height="",
                                 examinate_date="", blood_type="", family_diseases="", discomforts="",
-                                medications="", surgeries="", medical_device="", allergies="", display="none", new_pat_id = x[0])
+                                medications="", surgeries="", medical_device="", allergies="", uw='n', display="none",
+                                display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
+                                display_fam_del="none")
 
 
 @app.route('/check/',  methods=['GET', 'POST'])
@@ -323,7 +325,7 @@ def check():
         else:
             exam = "no_date"
     if (array[2] == []):
-        return render_template('doctor.html', name="", age="", weight="", height="", new_pat_id="",
+        return render_template('doctor.html', name="", age="", weight="", height="",
                            examinate_date="", blood_type="", family_diseases="", discomforts="", display_blood="none", upblood='n',
                            medications="", surgeries="", medical_device="", allergies="", uw='n', uphei='n', display_hei="none",
                            display="none", display_wei="none", display_fam="none", uf='n', display_date="none", up_exam_date="n", display_fam_ad="none",
@@ -333,7 +335,7 @@ def check():
         age = array[3][0][0]
         return render_template('doctor.html', name=array[2][0][0], age=array[3][0][0], weight=weight, height=height,
                            examinate_date=exam, blood_type=blood, family_diseases=family_diseases, discomforts=discomp, updisco='n',
-                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none", new_pat_id="",
+                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                            medications=medi, surgeries=surge, medical_device=med_dev, uphei='n', display_hei="none", display_blood="none", upblood='n',
                            allergies=aller, display_date="none", up_exam_date="n", uw='n', display="visible", display_wei="none", display_fam="none",
@@ -350,7 +352,7 @@ def update_wei():
                                 medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='y',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
-                                display="visible", display_wei="visible", display_fam="none", uf='n', display_fam_ad="none", new_pat_id="",
+                                display="visible", display_wei="visible", display_fam="none", uf='n', display_fam_ad="none",
                                 display_fam_del="none", uphei='n', display_hei="none", display_blood="none", upblood='n',display_date="none", up_exam_date="n",
                                 display_disco="none", display_disco_ad="none", display_disco_del="none", updisco='n', display_medi="none",
                                display_medi_ad="none", display_medi_del="none", upmedi='n', display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',)
@@ -369,7 +371,7 @@ def update_wei():
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
                                 examinate_date=exam, blood_type=blood, family_diseases=family_diseases, discomforts=discomp,
                                 medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='n',
-                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none", new_pat_id="",
+                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                 display_fam_del="none", uphei='n', display_hei="none", display_blood="none", upblood='n',display_date="none", up_exam_date="n",
@@ -382,7 +384,7 @@ def update_hei():
     global count_hei, height, weight, age, name, exam, blood, family_diseases, discomp, medi, surge, med_dev, aller
     if (count_hei == 0):
         count_hei = 1
-        return render_template('doctor.html', name=name, age=age, weight= weight, height=height, new_pat_id="",
+        return render_template('doctor.html', name=name, age=age, weight= weight, height=height,
                                 examinate_date=exam, blood_type=blood, family_diseases=family_diseases, discomforts=discomp,
                                 medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -410,7 +412,7 @@ def update_hei():
                                 medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='n',
                                 display="visible", uphei='n', display_hei="none", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                 display_fam_del="none", display_blood="none", upblood='n',display_date="none", up_exam_date="n",
-                                display_disco="none", display_disco_ad="none", display_disco_del="none", updisco='n', display_medi="none", new_pat_id="",
+                                display_disco="none", display_disco_ad="none", display_disco_del="none", updisco='n', display_medi="none",
                                display_medi_ad="none", display_medi_del="none", upmedi='n', display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',)
 
 count_date = 0
@@ -428,7 +430,7 @@ def update_date():
                                 display_fam_del="none", uphei='n', display_hei="none", display_blood="none", upblood='n',
                                 display_disco="none", display_disco_ad="none", display_disco_del="none", updisco='n',
                                display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', display_surge="none",
-                               display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="")
+                               display_surge_ad="none", display_surge_del="none", upsurge='n',)
     else :
         count_date = 0
         old_exam = exam
@@ -450,7 +452,7 @@ def update_date():
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', display_surge="none",
-                               display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="")
+                               display_surge_ad="none", display_surge_del="none", upsurge='n')
 
 blood_count = 0
 @app.route("/Update_blood/", methods=['GET', 'POST'])
@@ -467,7 +469,7 @@ def update_blood():
                                 display_fam_del="none", uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                 display_disco="none", display_disco_ad="none", display_disco_del="none", updisco='n',
                                display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', display_surge="none", display_surge_ad="none",
-                               display_surge_del="none", upsurge='n', new_pat_id="")
+                               display_surge_del="none", upsurge='n')
     else :
         blood_count = 0
         old_blood = blood
@@ -511,7 +513,7 @@ def update_blood():
                                 display_fam_del="none", uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                 display_disco="none", display_disco_ad="none", display_disco_del="none", updisco='n', display_medi="none",
                                display_medi_ad="none", display_medi_del="none", upmedi='n', display_surge="none", display_surge_ad="none", display_surge_del="none",
-                               upsurge='n', new_pat_id="")
+                               upsurge='n')
 
 delete_fam_count=0
 @app.route("/Delete_fam/", methods=['GET', 'POST'])
@@ -528,7 +530,7 @@ def delete_fam():
                                    display_fam_del="none", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
-                                   display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="")
+                                   display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n')
         else:
             delete_fam_count = 1
             return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -540,7 +542,7 @@ def delete_fam():
                                    display_blood="none", upblood='n', uphei='n', display_hei="none",
                                    display_date="none", up_exam_date="n", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n',
                                 display_fam_del="visible", display_disco="none", display_disco_ad="none", display_disco_del="none",
-                                   display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="")
+                                   display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n')
     else :
         delete_fam_count = 0
         statement = []
@@ -561,7 +563,7 @@ def delete_fam():
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
-                               display_disco="none", display_disco_ad="none", display_disco_del="none", new_pat_id="",
+                               display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 
@@ -580,7 +582,7 @@ def update_fam():
                                 display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none", updisco='n',
                                 up_exam_date="n", display_fam_del="none", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                 display_surge = "none", display_surge_ad = "none", display_surge_del = "none", upsurge = 'n',
-                                display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                                display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else :
         count_fam = 0
         i = 0
@@ -613,7 +615,7 @@ def update_fam():
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
-                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="",
+                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                 display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 count_add_fam = 0
@@ -632,7 +634,7 @@ def add_fam():
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
-                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else:
         count_add_fam = 0
         if request.form["new_fam"] != "":
@@ -653,7 +655,7 @@ def add_fam():
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                display_disco="none", display_disco_ad="none", display_disco_del="none", updisco='n',
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
-                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 delete_disco_count=0
 @app.route("/Delete_disco/", methods=['GET', 'POST'])
@@ -663,7 +665,7 @@ def delete_disco():
         if discomp == "-" or discomp == []:
             return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
                                    examinate_date=exam, blood_type=blood, family_diseases=family_diseases,
-                                   discomforts=discomp, new_pat_id="",
+                                   discomforts=discomp,
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                    medications=medi, surgeries=surge, medical_device=med_dev,
@@ -678,7 +680,7 @@ def delete_disco():
                                 examinate_date=exam, blood_type=blood, family_diseases=family_diseases, discomforts=discomp,
                                 medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
-                                display_blood="none", upblood='n', uphei='n', display_hei="none", new_pat_id="",
+                                display_blood="none", upblood='n', uphei='n', display_hei="none",
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display_date="none", up_exam_date="n", display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
@@ -705,7 +707,7 @@ def delete_disco():
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
-                               display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                               display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 
 count_disco = 0
@@ -722,7 +724,7 @@ def update_disco():
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="visible", display_disco_ad="none", display_disco_del="none",
-                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="",
+                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                up_exam_date="n", display_fam_del="none", updisco='y', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else :
         count_disco = 0
@@ -758,7 +760,7 @@ def update_disco():
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
-                                display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                                display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 count_add_disco = 0
 @app.route("/Add_disco/", methods=['GET', 'POST'])
@@ -776,7 +778,7 @@ def add_disco():
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                uf='n', display_fam_ad="none", display_fam_del="none", updisco='n', display_medi="none",
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
-                               display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                               display_medi_ad="none", display_medi_del="none", upmedi='n')
     else:
         count_add_disco = 0
         if request.form["new_disco"] != "":
@@ -792,7 +794,7 @@ def add_disco():
                                discomforts=discomp, medications=medi, surgeries=surge, medical_device=med_dev,
                                allergies=aller, uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
-                               display_disco="none", display_disco_ad="none", display_disco_del="none", new_pat_id="",
+                               display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                up_exam_date="n", uf='n', display_fam_ad="none", display_fam_del="none", updisco='n',
@@ -815,7 +817,7 @@ def delete_medi():
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                    display_disco="none", display_disco_ad="none", display_disco_del="none",
                                    uf='n', display_fam_ad="none", display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
-                                   display_fam_del="none", updisco='n', new_pat_id="")
+                                   display_fam_del="none", updisco='n')
         else:
             delete_medi_count = 1
             return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -824,7 +826,7 @@ def delete_medi():
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
-                                display_blood="none", upblood='n', uphei='n', display_hei="none", new_pat_id="",
+                                display_blood="none", upblood='n', uphei='n', display_hei="none",
                                 display_date="none", up_exam_date="n", display_medi="none", display_medi_ad="none", display_medi_del="visible", upmedi='n',
                                 display_disco="none", display_disco_ad="none", display_disco_del="none",
                                 display_fam_del="none", updisco='n', display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n')
@@ -846,7 +848,7 @@ def delete_medi():
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='n',
-                               display_disco="none", display_disco_ad="none", display_disco_del="none", new_pat_id="",
+                               display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n',
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n')
@@ -861,7 +863,7 @@ def update_medi():
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
                                 examinate_date=exam, blood_type=blood, family_diseases=family_diseases, discomforts=discomp,
                                 medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='n',
-                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none", new_pat_id="",
+                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
@@ -900,7 +902,7 @@ def update_medi():
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                 display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n',
-                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="")
+                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',)
 
 count_add_medi = 0
 @app.route("/Add_medi/", methods=['GET', 'POST'])
@@ -917,8 +919,8 @@ def add_medi():
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                uf='n', display_fam_ad="none", display_fam_del="none", updisco='n', display_medi="none",
-                               display_medi_ad="visible", display_medi_del="none", upmedi='n', new_pat_id="",
-                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n')
+                               display_medi_ad="visible", display_medi_del="none", upmedi='n',
+                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',)
     else:
         count_add_medi = 0
         if request.form["new_medi"] != "":
@@ -936,7 +938,7 @@ def add_medi():
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                allergies=aller, uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
-                               display_disco="none", display_disco_ad="none", display_disco_del="none", new_pat_id="",
+                               display_disco="none", display_disco_ad="none", display_disco_del="none",
                                up_exam_date="n", uf='n', display_fam_ad="none", display_fam_del="none", updisco='n',
                                display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n',
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',)
@@ -954,7 +956,7 @@ def delete_surge():
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                    medications=medi, surgeries=surge, medical_device=med_dev,
                                    allergies=aller, uw='n', display="visible", display_wei="none", display_fam="none",
-                                   display_disco="none", display_disco_ad="none", display_disco_del="none", new_pat_id="",
+                                   display_disco="none", display_disco_ad="none", display_disco_del="none",
                                    display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                    uf='n', display_fam_ad="none", display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                    display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
@@ -969,7 +971,7 @@ def delete_surge():
                                 display_blood="none", upblood='n', uphei='n', display_hei="none",
                                 display_date="none", up_exam_date="n", display_surge="none", display_surge_ad="none", display_surge_del="visible", upsurge='n',
                                 display_disco="none", display_disco_ad="none", display_disco_del="none",
-                                display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                                display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else :
         delete_surge_count = 0
         statement = []
@@ -990,7 +992,7 @@ def delete_surge():
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                display_disco="none", display_disco_ad="none", display_disco_del="none", display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
-                               display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                               display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 
 count_surge = 0
@@ -1006,7 +1008,7 @@ def update_surge():
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_surge="visible", display_surge_ad="none", display_surge_del="none", upsurge='y',
-                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none", new_pat_id="",
+                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                up_exam_date="n", display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else :
@@ -1041,7 +1043,7 @@ def update_surge():
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
-                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none", new_pat_id="",
+                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
@@ -1061,7 +1063,7 @@ def add_surge():
                                display_medi_ad="none", display_medi_del="none", upmedi='n', display_surge="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
-                               display_surge_ad="visible", display_surge_del="none", upsurge='n', new_pat_id="")
+                               display_surge_ad="visible", display_surge_del="none", upsurge='n',)
     else:
         count_add_surge = 0
         if request.form["new_surge"] != "":
@@ -1082,7 +1084,7 @@ def add_surge():
                                up_exam_date="n", uf='n', display_fam_ad="none", display_fam_del="none", updisco='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
-                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 delete_med_dev_count=0
 @app.route("/Delete_med_dev/", methods=['GET', 'POST'])
@@ -1094,7 +1096,7 @@ def delete_med_dev():
                                    examinate_date=exam, blood_type=blood, family_diseases=family_diseases,
                                    discomforts=discomp, display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",  upmed_dev='n',
-                                   medications=medi, surgeries=surge, medical_device=med_dev, new_pat_id="",
+                                   medications=medi, surgeries=surge, medical_device=med_dev,
                                    allergies=aller, uw='n', display="visible", display_wei="none", display_fam="none",
                                    display_disco="none", display_disco_ad="none", display_disco_del="none",
                                    display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
@@ -1108,7 +1110,7 @@ def delete_med_dev():
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                 display_blood="none", upblood='n', uphei='n', display_hei="none", display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display_date="none", up_exam_date="n", display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
-                                display_disco="none", display_disco_ad="none", display_disco_del="none", new_pat_id="",
+                                display_disco="none", display_disco_ad="none", display_disco_del="none",
                                 display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="visible", upmed_dev='n',
                                 display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else :
@@ -1127,7 +1129,7 @@ def delete_med_dev():
                                examinate_date=exam, blood_type=blood, family_diseases=family_diseases,
                                discomforts=discomp, display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='n',
-                               display_disco="none", display_disco_ad="none", display_disco_del="none", new_pat_id="",
+                               display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
@@ -1149,7 +1151,7 @@ def update_med_dev():
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_med_dev="visible", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='y', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
-                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="",
+                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                up_exam_date="n", display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else :
         count_med_dev = 0
@@ -1183,7 +1185,7 @@ def update_med_dev():
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
-                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="",
+                               display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                 display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 count_add_med_dev = 0
@@ -1202,7 +1204,7 @@ def add_med_dev():
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                display_med_dev="none", display_med_dev_ad="visible", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
-                               display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                               display_medi_ad="none", display_medi_del="none", upmedi='n')
     else:
         count_add_med_dev = 0
         if request.form["new_med_dev"] != "":
@@ -1223,7 +1225,7 @@ def add_med_dev():
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
-                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 delete_aller_count=0
 @app.route("/Delete_aller/", methods=['GET', 'POST'])
@@ -1239,7 +1241,7 @@ def delete_aller():
                                    medications=medi, surgeries=surge, medical_device=med_dev,
                                    allergies=aller, uw='n', display="visible", display_wei="none", display_fam="none",
                                    display_disco="none", display_disco_ad="none", display_disco_del="none",
-                                   display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="",
+                                   display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                    uf='n', display_fam_ad="none", display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                    display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
         else:
@@ -1253,7 +1255,7 @@ def delete_aller():
                                 display_blood="none", upblood='n', uphei='n', display_hei="none",
                                 display_date="none", up_exam_date="n", display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                 display_disco="none", display_disco_ad="none", display_disco_del="none",
-                                display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                                display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else :
         delete_aller_count = 0
         statement = []
@@ -1270,7 +1272,7 @@ def delete_aller():
                                examinate_date=exam, blood_type=blood, family_diseases=family_diseases,
                                discomforts=discomp, display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                medications=medi, surgeries=surge, medical_device=med_dev, allergies=aller, uw='n',
-                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none", new_pat_id="",
+                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                display_disco="none", display_disco_ad="none", display_disco_del="none", display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -1290,7 +1292,7 @@ def update_aller():
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
-                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none", new_pat_id="",
+                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="visible", display_aller_ad="none", display_aller_del="none", upaller='y',
                                up_exam_date="n", display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else :
@@ -1324,7 +1326,7 @@ def update_aller():
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
-                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none", new_pat_id="",
+                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
@@ -1344,7 +1346,7 @@ def add_aller():
                                display_medi_ad="none", display_medi_del="none", upmedi='n', display_surge="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="visible", display_aller_del="none", upaller='n',
-                               display_surge_ad="none", display_surge_del="none", upsurge='n', new_pat_id="")
+                               display_surge_ad="none", display_surge_del="none", upsurge='n',)
     else:
         count_add_aller = 0
         if request.form["new_aller"] != "":
@@ -1365,7 +1367,7 @@ def add_aller():
                                up_exam_date="n", uf='n', display_fam_ad="none", display_fam_del="none", updisco='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
-                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n', new_pat_id="")
+                               display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 if __name__ == "__main__":
     app.run()
