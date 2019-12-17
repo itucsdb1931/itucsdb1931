@@ -56,6 +56,7 @@ def register():
             cursor = connection.cursor()
             cursor.execute(state)
             record = cursor.fetchone()
+            print(record)
             cursor.close()
         if record == None:
             mail = request.form['mail']
@@ -127,6 +128,7 @@ def Exit():
 
 @app.route("/add_new_patient/", methods=['GET', 'POST'])
 def add_new_patient():
+    global blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     bloody = request.form["blood"]
     blood_new = "null"
 
@@ -518,7 +520,7 @@ def update_blood():
 delete_fam_count=0
 @app.route("/Delete_fam/", methods=['GET', 'POST'])
 def delete_fam():
-    global delete_fam_count, family_diseases
+    global delete_fam_count, family_diseases, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, exam
     if (delete_fam_count == 0):
         if family_diseases == "-" or family_diseases == []:
             return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -570,7 +572,7 @@ def delete_fam():
 count_fam = 0
 @app.route("/Update_fam/", methods=['GET', 'POST'])
 def update_fam():
-    global count_fam, family_diseases
+    global count_fam, family_diseases, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, exam
     if (count_fam == 0):
         count_fam = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -621,7 +623,7 @@ def update_fam():
 count_add_fam = 0
 @app.route("/Add_fam/", methods=['GET', 'POST'])
 def add_fam():
-    global count_add_fam, family_diseases
+    global count_add_fam, family_diseases, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, exam
     if count_add_fam == 0:
         count_add_fam = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -660,7 +662,7 @@ def add_fam():
 delete_disco_count=0
 @app.route("/Delete_disco/", methods=['GET', 'POST'])
 def delete_disco():
-    global delete_disco_count, discomp
+    global delete_disco_count, discomp, blood, age, name, weight, height, aller, med_dev, surge, medi, family_diseases, exam
     if (delete_disco_count == 0):
         if discomp == "-" or discomp == []:
             return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -713,7 +715,7 @@ def delete_disco():
 count_disco = 0
 @app.route("/Update_disco/", methods=['GET', 'POST'])
 def update_disco():
-    global count_disco, discomp
+    global count_disco, discomp, blood, age, name, weight, height, aller, med_dev, surge, medi, family_diseases, exam
     if (count_disco == 0):
         count_disco = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -765,7 +767,7 @@ def update_disco():
 count_add_disco = 0
 @app.route("/Add_disco/", methods=['GET', 'POST'])
 def add_disco():
-    global count_add_disco, discomp
+    global count_add_disco, discomp, blood, age, name, weight, height, aller, med_dev, surge, medi, family_diseases, exam
     if count_add_disco == 0:
         count_add_disco = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -804,7 +806,7 @@ def add_disco():
 delete_medi_count=0
 @app.route("/Delete_medi/", methods=['GET', 'POST'])
 def delete_medi():
-    global delete_medi_count, medications, medi
+    global delete_medi_count, medications, medi, blood, age, name, weight, height, aller, med_dev, surge, discomp, family_diseases, exam
     if (delete_medi_count == 0):
         if medi == "-" or medi == []:
             return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -857,7 +859,7 @@ def delete_medi():
 count_medi = 0
 @app.route("/Update_medi/", methods=['GET', 'POST'])
 def update_medi():
-    global count_medi, medi
+    global count_medi, medi, blood, age, name, weight, height, aller, med_dev, surge, discomp, family_diseases, exam
     if (count_medi == 0):
         count_medi = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -907,7 +909,7 @@ def update_medi():
 count_add_medi = 0
 @app.route("/Add_medi/", methods=['GET', 'POST'])
 def add_medi():
-    global count_add_medi, medi
+    global count_add_medi, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if count_add_medi == 0:
         count_add_medi = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -946,7 +948,7 @@ def add_medi():
 delete_surge_count=0
 @app.route("/Delete_surge/", methods=['GET', 'POST'])
 def delete_surge():
-    global delete_surge_count, surge
+    global delete_surge_count, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if (delete_surge_count == 0):
         if surge == "-" or surge == []:
             return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -998,7 +1000,7 @@ def delete_surge():
 count_surge = 0
 @app.route("/Update_surge/", methods=['GET', 'POST'])
 def update_surge():
-    global count_surge, surge
+    global count_surge, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if (count_surge == 0):
         count_surge = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -1050,7 +1052,7 @@ def update_surge():
 count_add_surge = 0
 @app.route("/Add_surge/", methods=['GET', 'POST'])
 def add_surge():
-    global count_add_surge, surge
+    global count_add_surge, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if count_add_surge == 0:
         count_add_surge = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -1089,7 +1091,7 @@ def add_surge():
 delete_med_dev_count=0
 @app.route("/Delete_med_dev/", methods=['GET', 'POST'])
 def delete_med_dev():
-    global delete_med_dev_count, med_dev
+    global delete_med_dev_count, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if (delete_med_dev_count == 0):
         if med_dev == "-" or med_dev == []:
             return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -1140,7 +1142,7 @@ def delete_med_dev():
 count_med_dev = 0
 @app.route("/Update_med_dev/", methods=['GET', 'POST'])
 def update_med_dev():
-    global count_med_dev, med_dev
+    global count_med_dev, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if (count_med_dev == 0):
         count_med_dev = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -1191,7 +1193,7 @@ def update_med_dev():
 count_add_med_dev = 0
 @app.route("/Add_med_dev/", methods=['GET', 'POST'])
 def add_med_dev():
-    global count_add_med_dev, med_dev
+    global count_add_med_dev, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if count_add_med_dev == 0:
         count_add_med_dev = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -1230,7 +1232,7 @@ def add_med_dev():
 delete_aller_count=0
 @app.route("/Delete_aller/", methods=['GET', 'POST'])
 def delete_aller():
-    global delete_aller_count, aller
+    global delete_aller_count, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if (delete_aller_count == 0):
         if aller == "-" or aller == []:
             return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -1282,7 +1284,7 @@ def delete_aller():
 count_aller = 0
 @app.route("/Update_aller/", methods=['GET', 'POST'])
 def update_aller():
-    global count_aller, aller
+    global count_aller, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if (count_aller == 0):
         count_aller = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
@@ -1333,7 +1335,7 @@ def update_aller():
 count_add_aller = 0
 @app.route("/Add_aller/", methods=['GET', 'POST'])
 def add_aller():
-    global count_add_aller, aller
+    global count_add_aller, blood, age, name, weight, height, aller, med_dev, surge, medi, discomp, family_diseases, exam
     if count_add_aller == 0:
         count_add_aller = 1
         return render_template('doctor.html', name=name, age=age, weight=weight, height=height,
