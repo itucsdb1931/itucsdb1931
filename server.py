@@ -312,7 +312,7 @@ def check():
         aller = list()
         for i in array[4]:
             aller.append( i[0] + " area: " + i[1])
-            session["aller"] = aller
+        session["aller"] = aller
             ###############################################################
         if (array[1] != [] and array[1][0][0] > 1):
             height = array[1][0][0]
@@ -583,10 +583,11 @@ def update_fam():
     zero()
     if (count_fam == 0):
         session["count_fam"] = 1
+        print(session.get("medi"), type(session.get("medi")), session.get("aller"), type(session.get("aller")))
         return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
                                 examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
-                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
+                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+                               uw='n', display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", display_wei="none", display_fam="visible", uf='y', display_fam_ad="none",
                                 display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none", updisco='n',
