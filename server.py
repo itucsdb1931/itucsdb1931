@@ -6,6 +6,7 @@ from configurations import db_url
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT' + str(random.random())
+
 INIT_STATEMENTS = [
 ]
 
@@ -138,15 +139,7 @@ def Exit():
 @app.route("/add_new_patient/", methods=['GET', 'POST'])
 def add_new_patient():
     bloody = request.form["blood"]
-    blood_new = "null"
-
-    # state = "SELECT MAX(ID) FROM PATIENT"
-    # with dbapi2.connect(db_url) as connection:
-    #     cursor = connection.cursor()
-    #     cursor.execute(state)
-    #     x = cursor.fetchone()
-    #     cursor.close()
-
+    blood_new = None
     if (bloody != ""):
         if bloody == "AB+":
             blood_new = 1
@@ -165,14 +158,14 @@ def add_new_patient():
         elif bloody == "B-":
             blood_new = 8
         else:
-            blood_new = "null"
+            blood_new = None
     statements = ["INSERT INTO PATIENT(NAME, AGE, WEIGHT, HEIGHT, LAST_EXAMINATION_DATE, "
                   "BLOOD_TYPE) VALUES(%s, %s, %s, %s, %s, %s) RETURNING ID"]
     with dbapi2.connect(db_url) as connection:
         cursor = connection.cursor()
         cursor.execute(statements[0], (request.form["name"], request.form["age"],
-                                                                          request.form["weight"],
-                                                                          request.form["height"], request.form["exam_date"],
+                                                                          request.form["weight"] or 0,
+                                                                          request.form["height"] or 0, request.form["exam_date"] or None,
                                                                           blood_new))
         x = cursor.fetchone()
         cursor.close()
@@ -275,6 +268,7 @@ def check():
             cursor.execute(state, tup)
             array.append(cursor.fetchall())
         cursor.close()
+        blood = "-"
         if(array[6] != [] ):
             if (array[6][0][0] == 1):
                 blood = "AB+"
@@ -320,11 +314,11 @@ def check():
             aller.append( i[0] + " area: " + i[1])
             session["aller"] = aller
             ###############################################################
-        if (array[1] != []):
+        if (array[1] != [] and array[1][0][0] > 1):
             height = array[1][0][0]
         else:
             height = "-"
-        if (array[0] != []):
+        if (array[0] != [] and array[0][0][0] > 1):
             weight = array[0][0][0]
         else:
             weight = "-"
