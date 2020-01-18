@@ -5,6 +5,7 @@ import psycopg2 as dbapi2
 
 
 INIT_STATEMENTS = [
+
 ]
 
 def initialize(url):

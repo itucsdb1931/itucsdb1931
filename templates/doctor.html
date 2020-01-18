@@ -107,14 +107,12 @@ DOCTOR
             </form>
                 <form style="display:{{display_fam}}" action="/Update_fam/" method="post">
                     <ol>
-                    {% set i = 0 %}
                     {% for fam_dis in family_diseases %}
                         <li>{% set fam = fam_dis.split(' area: ') %}
-                            <input type="text" placeholder="{{fam[0]}}" name="{{fam[0]}}">
+                            <input type="text" placeholder="{{fam[0]}}" name="{{loop.index|string+fam[0]}}">
                             <label><b>Area:</b></label>
-                            <input type="text" placeholder="{{fam[1]}}" name="{{fam[1]}}">
+                            <input type="text" placeholder="{{fam[1]}}" name="{{loop.index|string+fam[1]}}">
                         </li>
-                        {% set i = i+1 %}
                     {% endfor %}
                     </ol>
                     <button type="submit">OK</button>
