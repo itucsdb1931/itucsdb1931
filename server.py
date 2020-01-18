@@ -268,64 +268,65 @@ def check():
             cursor.execute(state, tup)
             array.append(cursor.fetchall())
         cursor.close()
-        blood = "-"
-        if(array[6] != [] ):
-            if (array[6][0][0] == 1):
-                blood = "AB+"
-            elif (array[6][0][0] == 2):
-                blood = "AB-"
-            elif (array[6][0][0] == 3):
-                blood = "0+"
-            elif (array[6][0][0] == 4):
-                blood = "0-"
-            elif (array[6][0][0] == 5):
-                blood = "A+"
-            elif (array[6][0][0] == 6):
-                blood = "AB-"
-            elif (array[6][0][0] == 7):
-                blood = "B+"
-            elif (array[6][0][0] == 8):
-                blood = "B-"
-            else:
-                blood = ""
-                ############################################
-        session["blood"] = blood
-        family_diseases = list()
-        for i in array[11]:
-            family_diseases.append(i[0] + " area: " + i[1])
-        discomp = list()
-        for i in array[7]:
-            discomp.append(i[0] + " area: " + i[1] + " level: " + str(i[2]))
-        session["discomp"] = discomp
-        medi = list()
-        for i in array[8]:
-            medi.append(i[0] + " usage: " + i[1])
-        session["medi"] = medi
-        surge = list()
-        for i in array[10]:
-            surge.append(i[0] + " area: " + i[1] + " level: " + str(i[2]))
-        session["surge"] = surge
-        med_dev = list()
-        for i in array[9]:
-            med_dev.append( i[0]  + " area: " + i[1])
-        session["med_dev"] = med_dev
-        aller = list()
-        for i in array[4]:
-            aller.append( i[0] + " area: " + i[1])
-        session["aller"] = aller
-            ###############################################################
-        if (array[1] != [] and array[1][0][0] > 1):
-            height = array[1][0][0]
+    blood = "-"
+    if(array[6] != [] ):
+        if (array[6][0][0] == 1):
+            blood = "AB+"
+        elif (array[6][0][0] == 2):
+            blood = "AB-"
+        elif (array[6][0][0] == 3):
+            blood = "0+"
+        elif (array[6][0][0] == 4):
+            blood = "0-"
+        elif (array[6][0][0] == 5):
+            blood = "A+"
+        elif (array[6][0][0] == 6):
+            blood = "AB-"
+        elif (array[6][0][0] == 7):
+            blood = "B+"
+        elif (array[6][0][0] == 8):
+            blood = "B-"
         else:
-            height = "-"
-        if (array[0] != [] and array[0][0][0] > 1):
-            weight = array[0][0][0]
-        else:
-            weight = "-"
-        if (array[5] != []):
-            exam = array[5][0][0]
-        else:
-            exam = "no_date"
+            blood = ""
+            ############################################
+    session["blood"] = blood
+    family_diseases = list()
+    for i in array[11]:
+        family_diseases.append(i[0] + " area: " + i[1])
+    session["fam_dis"] = family_diseases
+    discomp = list()
+    for i in array[7]:
+        discomp.append(i[0] + " area: " + i[1] + " level: " + str(i[2]))
+    session["discomp"] = discomp
+    medi = list()
+    for i in array[8]:
+        medi.append(i[0] + " usage: " + i[1])
+    session["medi"] = medi
+    surge = list()
+    for i in array[10]:
+        surge.append(i[0] + " area: " + i[1] + " level: " + str(i[2]))
+    session["surge"] = surge
+    med_dev = list()
+    for i in array[9]:
+        med_dev.append( i[0]  + " area: " + i[1])
+    session["med_dev"] = med_dev
+    aller = list()
+    for i in array[4]:
+        aller.append( i[0] + " area: " + i[1])
+    session["aller"] = aller
+        ###############################################################
+    if (array[1] != [] and array[1][0][0] > 1):
+        height = array[1][0][0]
+    else:
+        height = "-"
+    if (array[0] != [] and array[0][0][0] > 1):
+        weight = array[0][0][0]
+    else:
+        weight = "-"
+    if (array[5] != []):
+        exam = array[5][0][0]
+    else:
+        exam = "no_date"
     if (array[2] == []):
         return render_template('doctor.html', name="", age="", weight="", height="",
                            examinate_date="", blood_type="", family_diseases="", discomforts="", display_blood="none", upblood='n',
@@ -338,7 +339,6 @@ def check():
         session["height"] = height
         session["weight"] = weight
         session["exam"] = exam
-        session["fam_dis"] = family_diseases
         return render_template('doctor.html', name=array[2][0][0], age=array[3][0][0], weight=weight, height=height,
                            examinate_date=exam, blood_type=blood, family_diseases=family_diseases, discomforts=discomp, updisco='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -438,7 +438,6 @@ def update_date():
     else :
         session["count_exam"] = 0
         exam = request.form["new_date"]
-        print(exam)
         if (exam != ""):
             id = session.get("id")
             state = "UPDATE PATIENT SET LAST_EXAMINATION_DATE='%s' WHERE ID=%s"
@@ -583,7 +582,6 @@ def update_fam():
     zero()
     if (count_fam == 0):
         session["count_fam"] = 1
-        print(session.get("medi"), type(session.get("medi")), session.get("aller"), type(session.get("aller")))
         return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
                                 examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
                                 medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
