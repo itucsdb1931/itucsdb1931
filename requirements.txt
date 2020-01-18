@@ -2,4 +2,3 @@ Flask>=1.0
 psycopg2-binary>=2.7
 gunicorn>=19.9
 passlib>=1.7
-random>=9.6
