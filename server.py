@@ -317,16 +317,25 @@ def check():
         ###############################################################
     if (array[1] != [] and array[1][0][0] > 1):
         height = array[1][0][0]
+        session["height"] = height
     else:
         height = "-"
+        session["height"] = height
+
     if (array[0] != [] and array[0][0][0] > 1):
         weight = array[0][0][0]
+        session["weight"] = weight
     else:
         weight = "-"
+        session["weight"] = weight
+
     if (array[5] != []):
         exam = array[5][0][0]
+        session["exam"] = exam
     else:
         exam = "no_date"
+        session["exam"] = exam
+
     if (array[2] == []):
         return render_template('doctor.html', name="", age="", weight="", height="",
                            examinate_date="", blood_type="", family_diseases="", discomforts="", display_blood="none", upblood='n',
@@ -336,9 +345,6 @@ def check():
     else:
         session["name"] = array[2][0][0]
         session["age"] = array[3][0][0]
-        session["height"] = height
-        session["weight"] = weight
-        session["exam"] = exam
         return render_template('doctor.html', name=array[2][0][0], age=array[3][0][0], weight=weight, height=height,
                            examinate_date=exam, blood_type=blood, family_diseases=family_diseases, discomforts=discomp, updisco='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
