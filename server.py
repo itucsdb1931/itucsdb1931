@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from passlib.hash import pbkdf2_sha256 as hasher
 import psycopg2 as dbapi2
+import random
 from configurations import db_url
 
 app = Flask(__name__)
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT' + str(random.random())
 INIT_STATEMENTS = [
 ]
 
@@ -1448,5 +1450,4 @@ def add_aller():
                                display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
 
 if __name__ == "__main__":
-    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.run()
