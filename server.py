@@ -585,6 +585,7 @@ def delete_fam():
 def update_fam():
     count_fam = session.get("count_fam")
     family_diseases = session.get("fam_dis")
+    print(family_diseases, type(family_diseases))
     zero()
     if (count_fam == 0):
         session["count_fam"] = 1
