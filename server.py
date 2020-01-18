@@ -5,7 +5,7 @@ import random
 from configurations import db_url
 
 app = Flask(__name__)
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT' + str(random.random())
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 INIT_STATEMENTS = [
 ]
