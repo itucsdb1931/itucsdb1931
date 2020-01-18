@@ -356,13 +356,13 @@ def check():
 
 @app.route("/Update_wei/", methods=['GET', 'POST'])
 def update_wei():
-    count = session.get("count")
+    count = session["count"]
     zero()
     if (count == 0):
         session["count"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='y',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='y',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", display_wei="visible", display_fam="none", uf='n', display_fam_ad="none",
@@ -373,16 +373,16 @@ def update_wei():
         session["count"] = 0
         weight = request.form["new_weight"]
         if (weight != ""):
-            id = session.get("id")
+            id = session["id"]
             state = "UPDATE PATIENT SET WEIGHT=%s WHERE ID=%s"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (weight, id))
                 cursor.close()
             session["weight"] = weight
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -392,13 +392,13 @@ def update_wei():
 
 @app.route("/Update_hei/", methods=['GET', 'POST'])
 def update_hei():
-    count_hei = session.get("count_hei")
+    count_hei = session["count_hei"]
     zero()
     if (count_hei == 0):
         session["count_hei"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", uphei='y', display_hei="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -409,31 +409,33 @@ def update_hei():
         session["count_hei"] = 0
         height = request.form["new_height"]
         if (height != ""):
-            id = session.get("id")
+            id = session["id"]
             state = "UPDATE PATIENT SET HEIGHT=%s WHERE ID=%s"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (height, id))
                 cursor.close()
             session["height"] = height
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", uphei='n', display_hei="none", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                 display_fam_del="none", display_blood="none", upblood='n',display_date="none", up_exam_date="n",
                                 display_disco="none", display_disco_ad="none", display_disco_del="none", updisco='n', display_medi="none",
+                               display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
+                               display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none", upmed_dev='n',
                                display_medi_ad="none", display_medi_del="none", upmedi='n', display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',)
 
 
 @app.route("/Update_date/", methods=['GET', 'POST'])
 def update_date():
-    count_date = session.get("count_exam")
+    count_date = session["count_exam"]
     zero()
     if (count_date == 0):
         session["count_exam"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", display_date="visible", up_exam_date="y", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -445,16 +447,16 @@ def update_date():
         session["count_exam"] = 0
         exam = request.form["new_date"]
         if (exam != ""):
-            id = session.get("id")
+            id = session["id"]
             state = "UPDATE PATIENT SET LAST_EXAMINATION_DATE='%s' WHERE ID=%s"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (exam, id))
                 cursor.close()
             session["exam"] = exam
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_date="none", up_exam_date="n", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                 display_fam_del="none", uphei='n', display_hei="none", display_blood="none", upblood='n',
                                 display_disco="none", display_disco_ad="none", display_disco_del="none", updisco='n',
@@ -466,13 +468,13 @@ def update_date():
 
 @app.route("/Update_blood/", methods=['GET', 'POST'])
 def update_blood():
-    blood_count = session.get("blood_count")
+    blood_count = session["blood_count"]
     zero()
     if (blood_count == 0):
         session["blood_count"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n',
                                 display="visible", display_blood="visible", upblood='y', display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -505,16 +507,16 @@ def update_blood():
                 blood_new = "null"
 
         if (blood_new != "null"):
-            id = session.get("id")
+            id = session["id"]
             state = "UPDATE PATIENT SET BLOOD_TYPE=%s WHERE ID=%s"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (blood_new, id))
                 cursor.close()
             session["blood"] = bloody
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n',
                                 display="visible", display_blood="none", upblood='n', display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -526,14 +528,14 @@ def update_blood():
 
 @app.route("/Delete_fam/", methods=['GET', 'POST'])
 def delete_fam():
-    family_diseases = session.get("fam_dis")
-    delete_fam_count = session.get("count_fam_del")
+    family_diseases = session["fam_dis"]
+    delete_fam_count = session["count_fam_del"]
     zero()
     if (delete_fam_count == 0):
         if family_diseases == "-" or family_diseases == []:
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n',
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n',
                                     updisco='n', uw='n', display="visible", display_wei="none", display_fam="none",
                                    uf='n', display_fam_ad="none", display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                    display_fam_del="none", display_disco="none", display_disco_ad="none", display_disco_del="none",
@@ -542,9 +544,9 @@ def delete_fam():
                                    display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n')
         else:
             session["count_fam_del"] = 1
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -569,9 +571,9 @@ def delete_fam():
                 index +=1
             cursor.close()
         session["fam_dis"] = family_diseases
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), display_blood="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], display_blood="none",
                                upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",uw='n',
                                display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
@@ -583,15 +585,15 @@ def delete_fam():
 
 @app.route("/Update_fam/", methods=['GET', 'POST'])
 def update_fam():
-    count_fam = session.get("count_fam")
-    family_diseases = session.get("fam_dis")
+    count_fam = session["count_fam"]
+    family_diseases = session["fam_dis"]
     print(family_diseases, type(family_diseases))
     zero()
     if (count_fam == 0):
         session["count_fam"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                uw='n', display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", display_wei="none", display_fam="visible", uf='y', display_fam_ad="none",
@@ -607,7 +609,7 @@ def update_fam():
         if family_diseases == "-" or family_diseases == []:
             if (request.form["fam_dis"] != ""):
                 family_diseases.append(request.form["fam_dis"] + " area: " + request.form["area"])
-                ad = session.get("id")
+                ad = session["id"]
                 statement.append("INSERT INTO FAMILY_DISEASE(NAME, AREA, PERSON) VALUES(%s, %s, %s)")
                 formats.append((request.form["fam_dis"], request.form["area"], ad))
         else:
@@ -632,9 +634,9 @@ def update_fam():
                 i+=1
             cursor.close()
         session["fam_dis"] = family_diseases
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -646,14 +648,14 @@ def update_fam():
 
 @app.route("/Add_fam/", methods=['GET', 'POST'])
 def add_fam():
-    count_add_fam = session.get("count_add_fam")
-    family_diseases = session.get("fam_dis")
+    count_add_fam = session["count_add_fam"]
+    family_diseases = session["fam_dis"]
     zero()
     if count_add_fam == 0:
         session["count_add_fam"] = 1
-        return render_template('doctor.html',name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html',name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                uf='n', display_fam_ad="visible", display_fam_del="none", updisco='n',
@@ -666,16 +668,16 @@ def add_fam():
         if request.form["new_fam"] != "":
             family_diseases.append(request.form["new_fam"] + " area: " + request.form["fam_area"])
             session["fam_dis"] = family_diseases
-            id = session.get("id")
+            id = session["id"]
             state = "INSERT INTO FAMILY_DISEASE(NAME, AREA, PERSON) VALUES(%s, %s, %s)"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (request.form["new_fam"], request.form["fam_area"], id))
                 cursor.close()
         session["fam_dis"] = family_diseases
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", uf='n', display_fam_ad="none", display_fam_del="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -687,14 +689,14 @@ def add_fam():
 
 @app.route("/Delete_disco/", methods=['GET', 'POST'])
 def delete_disco():
-    delete_disco_count = session.get("count_disco_del")
-    discomp = session.get("discomp")
+    delete_disco_count = session["count_disco_del"]
+    discomp = session["discomp"]
     zero()
     if (delete_disco_count == 0):
         if discomp == "-" or discomp == []:
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                    uw='n', display="visible", display_wei="none", display_fam="none",
@@ -704,9 +706,9 @@ def delete_disco():
                                    display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
         else:
             session["count_disco_del"] = 1
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                 display_blood="none", upblood='n', uphei='n', display_hei="none",
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -731,9 +733,9 @@ def delete_disco():
                 i+=1
             cursor.close()
         session["discomp"] = discomp
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
@@ -745,14 +747,14 @@ def delete_disco():
 
 @app.route("/Update_disco/", methods=['GET', 'POST'])
 def update_disco():
-    count_disco = session.get("count_disco")
-    discomp = session.get("discomp")
+    count_disco = session["count_disco"]
+    discomp = session["discomp"]
     zero()
     if (count_disco == 0):
         session["count_disco"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -768,7 +770,7 @@ def update_disco():
         if discomp == "-" or discomp == []:
             if (request.form["disco"] != ""):
                 discomp.append(request.form["disco"] + " area: " + request.form["area"] + " level: " + request.form["level"])
-                ad = session.get("id")
+                ad = session["id"]
                 statement.append("INSERT INTO DISCOMFORT(NAME, AREA, LEVELS, PERSON) VALUES(%s, %s, %s, %s)")
                 formats.append((request.form["disco"], request.form["area"], request.form["level"], ad))
         else:
@@ -790,9 +792,9 @@ def update_disco():
                 i+=1
             cursor.close()
         session["discomp"] = discomp
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -803,14 +805,14 @@ def update_disco():
 
 @app.route("/Add_disco/", methods=['GET', 'POST'])
 def add_disco():
-    count_add_disco = session.get("count_add_disco")
-    discomp = session.get("discomp")
+    count_add_disco = session["count_add_disco"]
+    discomp = session["discomp"]
     zero()
     if count_add_disco == 0:
         session["count_add_disco"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="visible", display_disco_del="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -822,16 +824,16 @@ def add_disco():
         session["count_add_disco"] = 0
         if request.form["new_disco"] != "":
             discomp.append(request.form["new_disco"] + " area: " + request.form["disco_area"] + " level: " + request.form["disco_level"])
-            ad = session.get("id")
+            ad = session["id"]
             state = "INSERT INTO DISCOMFORT(NAME, AREA, LEVELS, PERSON) VALUES(%s, %s, %s, %s)"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (request.form["new_disco"], request.form["disco_area"],  request.form["disco_level"], ad))
                 cursor.close()
         session["discomp"] = discomp
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -843,14 +845,14 @@ def add_disco():
 
 @app.route("/Delete_medi/", methods=['GET', 'POST'])
 def delete_medi():
-    delete_medi_count = session.get("count_medi_del")
-    medi = session.get("medi")
+    delete_medi_count = session["count_medi_del"]
+    medi = session["medi"]
     zero()
     if (delete_medi_count == 0):
         if medi == "-" or medi == []:
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n',
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n',
                                     uw='n', display="visible", display_wei="none", display_fam="none",
                                    display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -860,9 +862,9 @@ def delete_medi():
                                    display_fam_del="none", updisco='n')
         else:
             session["count_medi_del"] = 1
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -887,9 +889,9 @@ def delete_medi():
                 i+=1
             cursor.close()
         session["medi"] = medi
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n',
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
@@ -901,14 +903,14 @@ def delete_medi():
 
 @app.route("/Update_medi/", methods=['GET', 'POST'])
 def update_medi():
-    count_medi = session.get("count_medi")
-    medi = session.get("medi")
+    count_medi = session["count_medi"]
+    medi = session["medi"]
     zero()
     if (count_medi == 0):
         session["count_medi"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -923,7 +925,7 @@ def update_medi():
         if medi == "-" or medi == []:
             if (request.form["medi"] != ""):
                 medi.append(request.form["medi"] + " usage: " + request.form["area"])
-                ad = session.get("id")
+                ad = session["id"]
                 statement.append("INSERT INTO MEDICATION(NAME, USAGES, PERSON) VALUES(%s, %s, %s)")
                 formats.append((request.form["medi"], request.form["area"], ad))
         else:
@@ -944,9 +946,9 @@ def update_medi():
                 i+=1
             cursor.close()
         session["medi"] = medi
-        return render_template('doctor.html', nname=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+        return render_template('doctor.html', nname=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -958,14 +960,14 @@ def update_medi():
 
 @app.route("/Add_medi/", methods=['GET', 'POST'])
 def add_medi():
-    count_add_medi = session.get("count_add_medi")
-    medi = session.get("medi")
+    count_add_medi = session["count_add_medi"]
+    medi = session["medi"]
     zero()
     if count_add_medi == 0:
         session["count_add_medi"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 uw='n', display="visible", display_wei="none", display_fam="none",
@@ -978,16 +980,16 @@ def add_medi():
         session["count_add_medi"] = 0
         if request.form["new_medi"] != "":
             medi.append(request.form["new_medi"] + " usage: " + request.form["medi_area"])
-            ad = session.get("id")
+            ad = session["id"]
             state = "INSERT INTO MEDICATION(NAME, USAGES, PERSON) VALUES(%s, %s, %s)"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (request.form["new_medi"], request.form["medi_area"], ad))
                 cursor.close()
         session["medi"] = medi
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
@@ -998,14 +1000,14 @@ def add_medi():
 
 @app.route("/Delete_surge/", methods=['GET', 'POST'])
 def delete_surge():
-    delete_surge_count = session.get("count_surge_del")
-    surge = session.get("surge")
+    delete_surge_count = session["count_surge_del"]
+    surge = session["surge"]
     zero()
     if (delete_surge_count == 0):
         if surge == "-" or surge == []:
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n', display="visible", display_wei="none", display_fam="none",
                                    display_disco="none", display_disco_ad="none", display_disco_del="none",
@@ -1014,9 +1016,9 @@ def delete_surge():
                                    display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
         else:
             session["count_surge_del"] = 1
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -1041,9 +1043,9 @@ def delete_surge():
                 i+=1
             cursor.close()
         session["surge"] = surge
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                 display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                 uw='n',display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
@@ -1053,14 +1055,14 @@ def delete_surge():
 
 @app.route("/Update_surge/", methods=['GET', 'POST'])
 def update_surge():
-    count_surge = session.get("count_surge")
-    surge = session.get("surge")
+    count_surge = session["count_surge"]
+    surge = session["surge"]
     zero()
     if (count_surge == 0):
         session["count_surge"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
@@ -1076,7 +1078,7 @@ def update_surge():
         if surge == "-" or surge == []:
             if (request.form["surge"] != ""):
                 surge.append(request.form["surge"] + " area: " + request.form["area"] + " level: " + request.form["level"])
-                ad = session.get("id")
+                ad = session["id"]
                 statement.append("INSERT INTO SURGERY(NAME, AREA, LEVELS, PERSON) VALUES(%s, %s, %s, %s)")
                 formats.append((request.form["surge"], request.form["area"], request.form["level"], ad))
         else:
@@ -1098,9 +1100,9 @@ def update_surge():
                 i+=1
             cursor.close()
         session["surge"] = surge
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
@@ -1111,14 +1113,14 @@ def update_surge():
 
 @app.route("/Add_surge/", methods=['GET', 'POST'])
 def add_surge():
-    count_add_surge = session.get("count_add_surge")
-    surge = session.get("surge")
+    count_add_surge = session["count_add_surge"]
+    surge = session["surge"]
     zero()
     if count_add_surge == 0:
         session["count_add_surge"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                uf='n', display_fam_ad="none", display_fam_del="none", updisco='n', display_medi="none",
@@ -1130,16 +1132,16 @@ def add_surge():
         session["count_add_surge"] = 0
         if request.form["new_surge"] != "":
             surge.append(request.form["new_surge"] + " area: " + request.form["surge_area"] + " level: " + request.form["surge_level"])
-            ad = session.get("id")
+            ad = session["id"]
             state = "INSERT INTO SURGERY(NAME, AREA, LEVELS, PERSON) VALUES(%s, %s, %s, %s)"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (request.form["new_surge"], request.form["surge_area"], request.form["surge_level"], ad))
                 cursor.close()
         session["surge"] = surge
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
@@ -1150,14 +1152,14 @@ def add_surge():
 
 @app.route("/Delete_med_dev/", methods=['GET', 'POST'])
 def delete_med_dev():
-    delete_med_dev_count = session.get("count_med_dev_del")
-    med_dev = session.get("med_dev")
+    delete_med_dev_count = session["count_med_dev_del"]
+    med_dev = session["med_dev"]
     zero()
     if (delete_med_dev_count == 0):
         if med_dev == "-" or med_dev == []:
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",  upmed_dev='n', uw='n', display="visible", display_wei="none", display_fam="none",
                                    display_disco="none", display_disco_ad="none", display_disco_del="none",
                                    display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
@@ -1165,9 +1167,9 @@ def delete_med_dev():
                                    display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
         else:
             session["count_med_dev_del"] = 1
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                 display_blood="none", upblood='n', uphei='n', display_hei="none", display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                 display_date="none", up_exam_date="n", display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
@@ -1191,9 +1193,9 @@ def delete_med_dev():
                 i+=1
             cursor.close()
         session["med_dev"] = med_dev
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                 uw='n', display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
@@ -1203,14 +1205,14 @@ def delete_med_dev():
 
 @app.route("/Update_med_dev/", methods=['GET', 'POST'])
 def update_med_dev():
-    count_med_dev = session.get("count_med_dev")
-    med_dev = session.get("med_dev")
+    count_med_dev = session["count_med_dev"]
+    med_dev = session["med_dev"]
     zero()
     if (count_med_dev == 0):
         session["count_med_dev"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
@@ -1226,7 +1228,7 @@ def update_med_dev():
         if med_dev == "-" or med_dev == []:
             if (request.form["med_dev"] != ""):
                 med_dev.append(request.form["med_dev"] + " area: " + request.form["area"])
-                ad = session.get("id")
+                ad = session["id"]
                 statement.append("INSERT INTO MEDICAL_DEVICE(NAME, AREA, PERSON) VALUES(%s, %s, %s)")
                 formats.append((request.form["med_dev"], request.form["area"], ad))
         else:
@@ -1247,9 +1249,9 @@ def update_med_dev():
                 i+=1
             cursor.close()
         session["med_dev"] = med_dev
-        return render_template('doctor.html',name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html',name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
@@ -1261,14 +1263,14 @@ def update_med_dev():
 count_add_med_dev = 0
 @app.route("/Add_med_dev/", methods=['GET', 'POST'])
 def add_med_dev():
-    count_add_med_dev = session.get("count_add_med_dev")
-    med_dev = session.get("med_dev")
+    count_add_med_dev = session["count_add_med_dev"]
+    med_dev = session["med_dev"]
     zero()
     if count_add_med_dev == 0:
         session["count_add_med_dev"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                uf='n', display_fam_ad="none", display_fam_del="none", updisco='n', display_medi="none",
@@ -1280,16 +1282,16 @@ def add_med_dev():
         session["count_add_med_dev"] = 0
         if request.form["new_med_dev"] != "":
             med_dev.append(request.form["new_med_dev"] + " area: " + request.form["med_dev_area"])
-            ad = session.get("id")
+            ad = session["id"]
             state = "INSERT INTO MEDICAL_DEVICE(NAME, AREA, PERSON) VALUES(%s, %s, %s)"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (request.form["new_med_dev"], request.form["med_dev_area"], ad))
                 cursor.close()
         session["med_dev"] = med_dev
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
                                up_exam_date="n", uf='n', display_fam_ad="none", display_fam_del="none", updisco='n',
@@ -1301,14 +1303,14 @@ def add_med_dev():
 
 @app.route("/Delete_aller/", methods=['GET', 'POST'])
 def delete_aller():
-    delete_aller_count = session.get("count_aller_del")
-    aller = session.get("aller")
+    delete_aller_count = session["count_aller_del"]
+    aller = session["aller"]
     zero()
     if (delete_aller_count == 0):
         if aller == "-" or aller == []:
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n', uw='n', display="visible", display_wei="none", display_fam="none",
                                    display_disco="none", display_disco_ad="none", display_disco_del="none",
@@ -1317,9 +1319,9 @@ def delete_aller():
                                    display_fam_del="none", updisco='n', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
         else:
             session["count_aller_del"] = 1
-            return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"),
+            return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"],
                                    display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                    upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="visible", upaller='n', uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
@@ -1344,9 +1346,9 @@ def delete_aller():
                 i+=1
             cursor.close()
         session["aller"] = aller
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], display_blood="none", upblood='n',  uphei='n', display_hei="none", display_date="none", up_exam_date="n",
                                 uw='n', display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                display_disco="none", display_disco_ad="none", display_disco_del="none", display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
@@ -1355,14 +1357,14 @@ def delete_aller():
 
 @app.route("/Update_aller/", methods=['GET', 'POST'])
 def update_aller():
-    count_aller = session.get("count_aller")
-    aller = session.get("aller")
+    count_aller = session["count_aller"]
+    aller = session["aller"]
     zero()
     if (count_aller == 0):
         session["count_aller"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
@@ -1378,7 +1380,7 @@ def update_aller():
         if aller == "-" or aller == []:
             if (request.form["aller"] != ""):
                 aller.append(request.form["aller"] + " area: " + request.form["area"])
-                ad = session.get("id")
+                ad = session["id"]
                 statement.append("INSERT INTO ALLERGY(NAME, AREA, PERSON) VALUES(%s, %s, %s)")
                 formats.append((request.form["aller"], request.form["area"], ad))
         else:
@@ -1399,9 +1401,9 @@ def update_aller():
                 i+=1
             cursor.close()
         session["aller"] = aller
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n',
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
                                 display="visible", display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
@@ -1412,14 +1414,14 @@ def update_aller():
 
 @app.route("/Add_aller/", methods=['GET', 'POST'])
 def add_aller():
-    count_add_aller = session.get("count_add_aller")
-    aller = session.get("aller")
+    count_add_aller = session["count_add_aller"]
+    aller = session["aller"]
     zero()
     if count_add_aller == 0:
         session["count_add_aller"] = 1
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                up_exam_date="n", display_disco="none", display_disco_ad="none", display_disco_del="none",
                                uf='n', display_fam_ad="none", display_fam_del="none", updisco='n', display_medi="none",
@@ -1431,16 +1433,16 @@ def add_aller():
         session["count_add_aller"] = 0
         if request.form["new_aller"] != "":
             aller.append(request.form["new_aller"] + " area: " + request.form["aller_area"])
-            ad = session.get("id")
+            ad = session["id"]
             state = "INSERT INTO ALLERGY(NAME, AREA, PERSON) VALUES(%s, %s, %s)"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (request.form["new_aller"], request.form["aller_area"], ad))
                 cursor.close()
         session["aller"] = aller
-        return render_template('doctor.html', name=session.get("name"), age=session.get("age"), weight=session.get("weight"), height=session.get("height"),
-                                examinate_date=session.get("exam"), blood_type=session.get("blood"), family_diseases=session.get("fam_dis"), discomforts=session.get("discomp"),
-                                medications=session.get("medi"), surgeries=session.get("surge"), medical_device=session.get("med_dev"), allergies=session.get("aller"), uw='n', display="visible", display_wei="none", display_fam="none",
+        return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
+                                examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
+                                medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n', display="visible", display_wei="none", display_fam="none",
                                display_blood="none", upblood='n', uphei='n', display_hei="none", display_date="none",
                                display_disco="none", display_disco_ad="none", display_disco_del="none",
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
