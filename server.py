@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from passlib.hash import pbkdf2_sha256 as hasher
 import psycopg2 as dbapi2
-import random
 from configurations import db_url
 
 app = Flask(__name__)
@@ -169,6 +168,7 @@ def add_new_patient():
                                                                           blood_new))
         x = cursor.fetchone()
         cursor.close()
+
     statements = []
     formats = []
     if request.form["fam_dis"] != "":
@@ -448,7 +448,7 @@ def update_date():
         exam = request.form["new_date"]
         if (exam != ""):
             id = session["id"]
-            state = "UPDATE PATIENT SET LAST_EXAMINATION_DATE='%s' WHERE ID=%s"
+            state = "UPDATE PATIENT SET LAST_EXAMINATION_DATE=%s WHERE ID=%s"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
                 cursor.execute(state, (exam, id))
@@ -587,7 +587,6 @@ def delete_fam():
 def update_fam():
     count_fam = session["count_fam"]
     family_diseases = session["fam_dis"]
-    print(family_diseases, type(family_diseases))
     zero()
     if (count_fam == 0):
         session["count_fam"] = 1
