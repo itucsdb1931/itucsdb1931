@@ -27,8 +27,11 @@ def zero():
         session['count_aller'] = session['count_aller_del'] = session["count_add_aller"] = 0
 
 @app.route("/")
+@app.route("/Exit/",  methods=['GET', 'POST'])
 def home():
     zero()
+    session["is_admin"] = "no"
+    session["is_doctor"] = "no"
     return render_template('home.html')
 
 @app.route("/login", methods=["GET", "POST"])
@@ -45,11 +48,13 @@ def login():
             if record != None:
                 if record[1]: # admin
                     if hasher.verify(passw, record[2]):
+                        session["is_admin"] = "yes"
                         return redirect(url_for("admin_page"))
                     else: ###################################### hatalı şifre
                         render_template("login.html")
                 else: # doctor
                     if hasher.verify(passw, record[2]):
+                        session["is_doctor"] = "yes"
                         return render_template('doctor.html', display="none")
                     else:  ###################################### hatalı şifre
                         render_template("login.html")
@@ -82,12 +87,17 @@ def register():
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin_page():
-    return render_template('admin.html', display="none")
+    if(session["is_admin"] == "yes"):
+        return render_template('admin.html', display="none")
+    else:
+        return redirect(url_for("home"))
 
 @app.route("/doctor", methods=["GET", "POST"])
 def doctor_page():
-    return render_template('doctor.html', display="none")
-
+    if(session["is_doctor"] == "yes"):
+        return render_template('doctor.html', display="none")
+    else:
+        return redirect(url_for("home"))
 @app.route("/add_patient")
 def add_patient():
     zero()
@@ -131,9 +141,6 @@ def show_users():
         cursor.close()
     return render_template('admin.html', users=users, display="visible", sel='u')
 
-@app.route("/Exit/",  methods=['GET', 'POST'])
-def Exit():
-    return render_template('home.html')
 
 @app.route("/add_new_patient/", methods=['GET', 'POST'])
 def add_new_patient():
@@ -160,12 +167,11 @@ def add_new_patient():
             blood_new = None
     statements = ["INSERT INTO PATIENT(NAME, AGE, WEIGHT, HEIGHT, LAST_EXAMINATION_DATE, "
                   "BLOOD_TYPE) VALUES(%s, %s, %s, %s, %s, %s) RETURNING ID"]
+    name = request.form["name"]
     with dbapi2.connect(db_url) as connection:
         cursor = connection.cursor()
-        cursor.execute(statements[0], (request.form["name"], request.form["age"],
-                                                                          request.form["weight"] or 0,
-                                                                          request.form["height"] or 0, request.form["exam_date"] or None,
-                                                                          blood_new))
+        cursor.execute(statements[0], (name, request.form["age"], request.form["weight"] or 0,
+                                       request.form["height"] or 0, request.form["exam_date"] or None, blood_new))
         x = cursor.fetchone()
         cursor.close()
 
@@ -183,12 +189,12 @@ def add_new_patient():
     if request.form["disco"] != "":
         state = "INSERT INTO DISCOMFORT(NAME, AREA, LEVELS, PERSON) VALUES(%s, %s, %s, %s)"
         statements.append(state)
-        formats.append((request.form["disco"], request.form["disco_area"], request.form["disco_level"], x[0]))
+        formats.append((request.form["disco"], request.form["disco_area"], request.form["disco_level"] or None, x[0]))
     if int(request.form["disco_number"]) != 0:
         for i in range(int(request.form["disco_number"])):
             state = "INSERT INTO DISCOMFORT(NAME, AREA, LEVELS, PERSON) VALUES(%s, %s, %s, %s)"
             statements.append(state)
-            formats.append((request.form["disco" + str(i)], request.form["disco_area" + str(i)], request.form["disco_level" + str(i)], x[0]))
+            formats.append((request.form["disco" + str(i)], request.form["disco_area" + str(i)], request.form["disco_level" + str(i)] or None, x[0]))
     if request.form["med_dev"] != "":
         state = "INSERT INTO MEDICAL_DEVICE(NAME, AREA, PERSON) VALUES(%s, %s, %s)"
         statements.append(state)
@@ -238,7 +244,7 @@ def add_new_patient():
                                 examinate_date="", blood_type="", family_diseases="", discomforts="",
                                 medications="", surgeries="", medical_device="", allergies="", uw='n', display="none",
                                 display_wei="none", display_fam="none", uf='n', display_fam_ad="none",
-                                display_fam_del="none")
+                                display_fam_del="none", no_res = "Patient: {} saved successfully with id {} ".format(name, x[0]))
 
 
 @app.route('/check/',  methods=['GET', 'POST'])
@@ -331,7 +337,7 @@ def check():
 
     if (array[5] != []):
         exam = array[5][0][0]
-        session["exam"] = exam
+        session["exam"] = str(exam)
     else:
         exam = "no_date"
         session["exam"] = exam
@@ -453,7 +459,7 @@ def update_date():
                 cursor = connection.cursor()
                 cursor.execute(state, (exam, id))
                 cursor.close()
-            session["exam"] = exam
+            session["exam"] = str(exam)
         return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
                                 examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
                                 medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
@@ -735,7 +741,8 @@ def delete_disco():
         return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
                                 examinate_date=session["exam"], blood_type=session["blood"], family_diseases=session["fam_dis"], discomforts=session["discomp"],
                                 medications=session["medi"], surgeries=session["surge"], medical_device=session["med_dev"], allergies=session["aller"], uw='n',
-                               display_disco="none", display_disco_ad="none", display_disco_del="none",
+                               up_exam_date="n", upblood='n', uphei='n', display_hei="none", display_date="none",
+                               display_disco="none", display_disco_ad="none", display_disco_del="none", display_blood="none",
                                display_med_dev="none", display_med_dev_ad="none", display_med_dev_del="none",
                                upmed_dev='n', display_aller="none", display_aller_ad="none", display_aller_del="none", upaller='n',
                                display_surge="none", display_surge_ad="none", display_surge_del="none", upsurge='n',
@@ -763,7 +770,7 @@ def update_disco():
                                up_exam_date="n", display_fam_del="none", updisco='y', display_medi="none", display_medi_ad="none", display_medi_del="none", upmedi='n')
     else :
         session["count_disco"] = 0
-        i = 0
+        i = 1
         statement = []
         formats = []
         if discomp == "-" or discomp == []:
@@ -771,16 +778,24 @@ def update_disco():
                 discomp.append(request.form["disco"] + " area: " + request.form["area"] + " level: " + request.form["level"])
                 ad = session["id"]
                 statement.append("INSERT INTO DISCOMFORT(NAME, AREA, LEVELS, PERSON) VALUES(%s, %s, %s, %s)")
-                formats.append((request.form["disco"], request.form["area"], request.form["level"], ad))
+                formats.append((request.form["disco"], request.form["area"], request.form["level"] or None, ad))
         else:
             for disco in discomp:
                 x = disco.split(' area: ')
-                if (request.form[x[0]] != ""):
-                    old_name = x[0]
-                    y = x[1].split(' level: ')
-                    discomp[i] = (request.form[x[0]] + " area: " + request.form[y[0]] + " level: " + request.form[y[1]])
+                new_name = request.form[str(i) + x[0]]
+                y = x[1].split(' level: ')
+                new_area = request.form[str(i) + y[0]]
+                new_level = request.form['l1' + str(i) + y[1]]
+                if (new_name != "" or new_area != "" or new_level != ""):
+                    if new_name == "":
+                        new_name = x[0]
+                    if new_area == "":
+                        new_area = y[0]
+                    if new_level == "":
+                        new_level = y[1]
+                    discomp[i - 1] = (new_name + " area: " + new_area + " level: " + new_level)
                     statement.append("UPDATE DISCOMFORT SET NAME=%s, AREA=%s, LEVELS=%s WHERE NAME=%s")
-                    formats.append((request.form[x[0]], request.form[y[0]], request.form[y[1]], old_name))
+                    formats.append((new_name, new_area, new_level or None, x[0]))
                 i+=1
 
         with dbapi2.connect(db_url) as connection:
@@ -827,7 +842,7 @@ def add_disco():
             state = "INSERT INTO DISCOMFORT(NAME, AREA, LEVELS, PERSON) VALUES(%s, %s, %s, %s)"
             with dbapi2.connect(db_url) as connection:
                 cursor = connection.cursor()
-                cursor.execute(state, (request.form["new_disco"], request.form["disco_area"],  request.form["disco_level"], ad))
+                cursor.execute(state, (request.form["new_disco"], request.form["disco_area"],  request.form["disco_level"] or None, ad))
                 cursor.close()
         session["discomp"] = discomp
         return render_template('doctor.html', name=session["name"], age=session["age"], weight=session["weight"], height=session["height"],
