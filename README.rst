@@ -18,5 +18,6 @@ CRITICISM
 We are not allowed to use SQLAlchemy, so some 
 parts of the code is a little bit complicated. And instead of doing some 
 operations on the server, we should have done it on the client part.
+And Also the view of the project could have been better, but we have limited time.
 
 https://itucsdb1931.herokuapp.com/
