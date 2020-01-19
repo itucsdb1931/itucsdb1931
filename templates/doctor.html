@@ -38,8 +38,8 @@ th, td {
 <div align="center"><p>{{ no_res }}</p></div>
 <table style="display:{{display}}">
     <tr>
-        <th colspan="2"><b>Name:</b>{{ name }}</th>
-        <th colspan="2"><b>Age:</b>{{ age }}</th>
+        <th colspan="2"><b>Name:</b>&nbsp;{{ name }}</th>
+        <th colspan="2"><b>Age:</b>&nbsp;{{ age }}</th>
     </tr>
     <tr>
         <td><b>Weight:</b> {% if uw == 'n' %}{{ weight }}{% endif %}
@@ -188,16 +188,14 @@ th, td {
             </form>
                 <form style="display:{{display_disco}}" action="/Update_disco/" method="post">
                     <ol>
-                    {% set i = 0 %}
                     {% for disco in discomforts %}
                         <li>{% set dis = disco.split(' area: ') %}{% set lev = dis[1].split(' level: ') %}
-                            <input type="text" placeholder="{{dis[0]}}" name="{{dis[0]}}">
+                            <input type="text" placeholder="{{dis[0]}}" name="{{loop.index|string+dis[0]}}">
                             <label><b>Area:</b></label>
-                            <input type="text" placeholder="{{lev[0]}}" name="{{lev[0]}}">
+                            <input type="text" placeholder="{{lev[0]}}" name="{{loop.index|string+lev[0]}}">
                             <label><b>Level:</b></label>
-                            <input type="number" placeholder="{{lev[1]}}" name="{{lev[1]}}">
+                            <input type="number" placeholder="{{lev[1]}}" name="{{'l1'+loop.index|string+lev[1]}}">
                         </li>
-                        {% set i = i+1 %}
                     {% endfor %}
                     </ol>
                     <button type="submit">OK</button>
