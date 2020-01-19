@@ -7,7 +7,11 @@ and the PostgreSQL database.
 
 THE AIM
 
-Aim of this project is present to doctors more opportunity.
+Aims of this project are present to doctors more opportunity for correct diagnosis,
+Easy monitoring of patient characteristics,
+Prevent misdiagnosis,
+Shorten the inspection time,
+Better predictabilitiy thanks to seeing family diseases,
 
 CRITICISM
 
